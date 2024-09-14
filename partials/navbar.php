@@ -1,7 +1,22 @@
+<?php
+
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: sign-in.php"); // Redirect to login if not logged in
+    exit();
+}
+
+// Display the user's email
+$user_email = $_SESSION['email'];
+?>
+
 <div class="navbar-header">
             <div class="row align-items-center justify-content-between">
                 <div class="col-auto">
                     <div class="d-flex flex-wrap align-items-center gap-4">
+                        
                         <button type="button" class="sidebar-toggle">
                             <iconify-icon icon="heroicons:bars-3-solid" class="icon text-2xl non-active"></iconify-icon>
                             <iconify-icon icon="iconoir:arrow-right" class="icon text-2xl active"></iconify-icon>
@@ -190,7 +205,9 @@
                             <div class="dropdown-menu to-top dropdown-menu-sm">
                                 <div class="py-12 px-16 radius-8 bg-primary-50 mb-16 d-flex align-items-center justify-content-between gap-2">
                                     <div>
-                                        <h6 class="text-lg text-primary-light fw-semibold mb-2">Admin@admin</h6>
+                                    <h6 class="text-lg text-primary-light fw-semibold mb-2">
+                                        <?php echo htmlspecialchars($user_email); ?>
+                                    </h6>
                                         <span class="text-secondary-light fw-medium text-sm">Admin</span>
                                     </div>
                                     <button type="button" class="hover-text-danger">

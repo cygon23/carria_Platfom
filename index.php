@@ -1,8 +1,20 @@
-<?php 
-    $title='Welcome Rahman !';
-    $subTitle = 'AI';
+<?php
+
+session_start();
+
+// Check if the user is logged in
+if (!isset($_SESSION['email'])) {
+    header("Location: sign-in.php"); // Redirect to login if not logged in
+    exit();
+}
+
+// Display the user's email
+$user_email = $_SESSION['email'];
 ?>
 <?php include './partials/layouts/layoutTop.php' ?>
+<h1 class="h4 text-muted fw-normal">
+    Welcome, <?php echo htmlspecialchars($user_email); ?>!
+</h1>
 
     <div class="row row-cols-xxxl-5 row-cols-lg-3 row-cols-sm-2 row-cols-1 gy-4">
         <div class="col">
