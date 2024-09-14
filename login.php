@@ -27,6 +27,7 @@ if (isset($_POST['login'])) {
             $_SESSION['user_id'] = $user_data['id'];
             $_SESSION['email'] = $user_data['email'];
             $_SESSION['user_type'] = $user_data['user_type'];
+            
 
             // If "Remember Me" is checked, set cookies
             if ($remember) {
