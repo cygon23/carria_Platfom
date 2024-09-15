@@ -44,7 +44,7 @@
     <section class="auth bg-base d-flex flex-wrap">
         <div class="auth-left d-lg-block d-none">
             <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-                <img src="assets/images/auth/" alt="">
+                <img src="assets/images/auth/log.webp" alt="" class="img-fluid w-100 h-100" style="object-fit: cover;">
             </div>
         </div>
         <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">

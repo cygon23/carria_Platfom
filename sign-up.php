@@ -42,11 +42,12 @@
 <body>
 
     <section class="auth bg-base d-flex flex-wrap">
-        <div class="auth-left d-lg-block d-none">
-            <div class="d-flex align-items-center flex-column h-100 justify-content-center">
-                <img src="assets/images/auth/auth-img.png" alt="">
-            </div>
-        </div>
+    <div class="auth-left d-lg-block d-none">
+    <div class="d-flex align-items-center flex-column h-100 justify-content-center">
+        <img src="assets/images/auth/now.webp" alt="" class="img-fluid w-100 h-100" style="object-fit: cover;">
+    </div>
+</div>
+
         <div class="auth-right py-32 px-24 d-flex flex-column justify-content-center">
             <div class="max-w-464-px mx-auto w-100">
                 <div>

@@ -23,10 +23,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $conn->prepare("INSERT INTO users (name, email, password, user_type) VALUES (?, ?, ?, ?)");
     $stmt->bind_param("ssss", $name, $email, $hashed_password, $user_type);
 
-    var_dump($_POST);
+  
     // Execute the query and check for success
     if ($stmt->execute()) {
-        echo "User registered successfully!";
+        // echo "User registered successfully!";
         header("Location: sign-in.php"); // Redirect to a success page (optional)
     } else {
         echo "Error: " . $stmt->error;
