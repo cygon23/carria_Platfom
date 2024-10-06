@@ -13,8 +13,8 @@
                             @csrf
                             <div class="mb-3">
                                 <label for="" class="mb-2">Name*</label>
-                                <input type="text" name="name" id="name" class="form-control"
-                                    placeholder="Enter Name">
+                                <input type="text" name="name" value="{{ old('name') }}" id="name"
+                                    class="form-control" placeholder="Enter Name">
                                 @error('name')
                                     <p class="m-0 small alert alert-danger shadow-sm">{{ $message }}</p>
                                     <!-- Use $message for error messages -->
@@ -22,8 +22,8 @@
                             </div>
                             <div class="mb-3">
                                 <label for="" class="mb-2">Email*</label>
-                                <input type="text" name="email" id="email" class="form-control"
-                                    placeholder="Enter Email">
+                                <input type="text" name="email" value="{{ old('email') }}" id="email"
+                                    class="form-control" placeholder="Enter Email">
                                 @error('email')
                                     <p class="m-0 small alert alert-danger shadow-sm">{{ $message }}</p>
                                     <!-- Use $message for error messages -->
