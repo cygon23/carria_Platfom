@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+
 
 class AuthController extends Controller
 {
@@ -103,6 +105,31 @@ class AuthController extends Controller
 
         return redirect()->back()->with('success', 'Profile updated successfully');
     }
+
+    public function profileImage(Request $request)
+    {
+        $request->validate([
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
+        ]);
+
+        $user = Auth::user()->id;
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists and it's not the default
+            if ($user->image && $user->image !== 'images/default_avatar.png') {
+                $oldImagePath = str_replace('storage/', 'public/', $user->image);
+                Storage::delete($oldImagePath);
+            }
+
+            $path = $request->file('image')->store('profile_images', 'public');
+            $user->image = 'storage/' . $path; // Update image path
+            $user->save();
+        }
+
+        return redirect()->back()->with('success', 'Profile image updated successfully.');
+    }
+
+
 
 
     public function logout()

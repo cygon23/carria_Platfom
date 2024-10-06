@@ -17,5 +17,6 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
     Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
+    Route::post('/profileImage', [AuthController::class, 'profileImage'])->name('profileImage');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

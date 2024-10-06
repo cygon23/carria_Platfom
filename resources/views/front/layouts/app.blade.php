@@ -57,7 +57,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form method="POST" action="{{ route('profileImage') }}" enctype="multipart/form-data">
+                        @csrf
                         <div class="mb-3">
                             <label for="exampleInputEmail1" class="form-label">Profile Image</label>
                             <input type="file" class="form-control" id="image" name="image">
