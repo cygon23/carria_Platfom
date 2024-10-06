@@ -109,7 +109,7 @@ class AuthController extends Controller
     public function profileImage(Request $request)
     {
         $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // 2MB Max
+            'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // 2MB Max
         ]);
 
         $user = Auth::user()->id;
