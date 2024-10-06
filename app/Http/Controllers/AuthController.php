@@ -45,14 +45,33 @@ class AuthController extends Controller
     }
 
 
-    public function auth_login(Request $request)
+    public function authenticate(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+            'password' => 'required|min:8|max:20',
+        ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('dashboard')->with('success', 'Welcome back!');
+            return redirect()->route('profile')->with('success', 'Welcome back!');
         } else {
-            return redirect()->back()->withInput()->withErrors(['error' => 'Invalid username or password.']);
+            return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
         }
+    }
+
+
+    public function profile()
+    {
+        return view('auth.profile');
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return redirect()->route('login')->with('warning', 'succefully loged out');
     }
 }
