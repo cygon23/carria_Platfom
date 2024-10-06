@@ -7,7 +7,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [homeController::class, 'index']);
 
-Route::get('/register', [AuthController::class, 'register']);
-Route::post('/register', [AuthController::class, 'processRegistration']);
-Route::get('/login', [AuthController::class, 'login']);
-Route::get('/login/auth', [AuthController::class, 'auth_login']);
+Route::middleware('guest')->group(function () {
+    Route::get('/register', [AuthController::class, 'register']);
+    Route::post('/register', [AuthController::class, 'processRegistration']);
+    Route::get('/login', [AuthController::class, 'login'])->name('login');
+    Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('login.authenticate');
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
+    Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
