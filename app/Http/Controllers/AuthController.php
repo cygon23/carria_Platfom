@@ -65,9 +65,45 @@ class AuthController extends Controller
 
 
     public function profile()
+
     {
-        return view('auth.profile');
+        $id = Auth::user()->id;
+
+        $user = User::where('id', $id)->first();
+
+        return view('auth.profile', [
+            'user' => $user
+        ]);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $id = Auth::user()->id;
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|min:5|max:20',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'mobile' => ['required', 'regex:/^\+?[0-9]{10,15}$/'],
+            'designation' => 'required|string|min:7|max:50',
+        ]);
+
+        // If validation fails
+        if ($validator->fails()) {
+            session()->flash('error', 'consider length please.');
+            return redirect()->back()->withInput()->with('validationErrors', $validator->errors());
+        }
+
+
+        $user = User::find($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->mobile = $request->mobile;
+        $user->designation = $request->designation;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
 
     public function logout()
     {

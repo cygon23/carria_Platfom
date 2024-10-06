@@ -23,7 +23,5 @@ return Application::configure(basePath: dirname(__DIR__))
             Authenticate::class,
         ]);
     })
-    ->withExceptions(function (Exceptions $exceptions) {
-        // Exception handling logic can be added here
-    })
+    ->withExceptions(function (Exceptions $exceptions) {})
     ->create();
