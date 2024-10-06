@@ -9,12 +9,12 @@
                     <div class="card shadow border-0 p-5">
                         <h1 class="h3">Login</h1>
                         @include('front.layouts._message')
-                        <form action="" method="post">
+                        <form action="{{ route('login.authenticate') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <label for="" class="mb-2">Email*</label>
-                                <input type="text" name="email" id="email" class="form-control"
-                                    placeholder="example@example.com">
+                                <input type="text" name="email" id="email" value="{{ old('email') }}"
+                                    class="form-control" placeholder="example@example.com">
                                 @error('email')
                                     <p class="m-0 small alert alert-danger shadow-sm">{{ $message }}</p>
                                     <!-- Use $message for error messages -->
@@ -22,7 +22,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="" class="mb-2">Password*</label>
-                                <input type="password" name="name" id="name" class="form-control"
+                                <input type="password" name="password" id="password" class="form-control"
                                     placeholder="Enter Password">
                                 @error('password')
                                     <p class="m-0 small alert alert-danger shadow-sm">{{ $message }}</p>
