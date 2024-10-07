@@ -208,6 +208,83 @@ class AuthController extends Controller
         ]);
     }
 
+    public function editJob(Request $request, $id)
+    {
+
+        $categories = Category::orderBy('name', 'ASC')->where('status', 1)->get();
+
+        $job_types = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
+
+
+        $job = Job::where([
+            'user_id' => Auth::user()->id,
+            'id' => $id
+        ])->first();
+
+        //if job isnull
+        if ($job == null) {
+            abort(404);
+        }
+
+        return view('front.jobs.edit', [
+            'categories' => $categories,
+            'job_types' =>  $job_types,
+            'job' => $job,
+
+        ]);
+    }
+
+
+    public function updateJob(Request $request, $id)
+    {
+        // Validation rules
+        $rules = [
+            'title' => 'required|min:5|max:200',
+            'category' => 'required',
+            'job_nature' => 'required',
+            'vacancy' => 'required|integer',
+            'location' => 'required|max:50',
+            'description' => 'required',
+            'keywords' => 'required',
+            'company_name' => 'required|min:3|max:75',
+            'salary' => 'nullable',  // Optional field
+            'benefits' => 'nullable',  // Optional field
+            'responsibility' => 'nullable',  // Optional field
+            'qualification' => 'nullable',  // Optional field
+            'experience' => 'required|integer',  // Mandatory field
+            'company_location' => 'nullable',  // Optional field
+            'company_website' => 'nullable|url'  // Optional field, validate URL format
+        ];
+
+        // Validate the incoming request using the defined rules
+        $validatedData = $request->validate($rules);
+
+
+        // Storing the job data
+        $job = Job::find($id);
+
+        $job->title = $validatedData['title'];
+        $job->category_id = $validatedData['category']; // Make sure to use category id
+        $job->job_type_id = $validatedData['job_nature']; // Make sure to use job type id
+        $job->user_id = Auth::user()->id;
+        $job->vacancy = $validatedData['vacancy'];
+        $job->salary = $validatedData['salary'] ?? null;
+        $job->location = $validatedData['location'];
+        $job->description = $validatedData['description'];
+        $job->benefits = $validatedData['benefits'] ?? null;
+        $job->responsibility = $validatedData['responsibility'] ?? null;
+        $job->qualification = $validatedData['qualification'] ?? null;
+        $job->keywords = $validatedData['keywords'];
+        $job->experience = $validatedData['experience'];
+        $job->company_name = $validatedData['company_name'];
+        $job->company_location = $validatedData['company_location'] ?? null;  // Optional field
+        $job->company_website = $validatedData['company_website'] ?? null;  // Optional field
+        $job->save();
+
+        // Redirect or return a response after successfully saving
+        return redirect()->route('my-job')->with('success', 'Job updated successfully!');
+    }
+
     public function logout()
     {
         Auth::logout();

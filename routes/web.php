@@ -21,5 +21,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/create-job', [AuthController::class, 'createJob'])->name('create-job');
     Route::post('/save-job', [AuthController::class, 'saveJob'])->name('save-job');
     Route::get('/my-jobs', [AuthController::class, 'myJobs'])->name('my-job');
+    Route::get('/edit-jobs/{id}', [AuthController::class, 'editJob'])->name('edit-job');
+    Route::post('/update-job/{id}', [AuthController::class, 'updateJob'])->name('update-job');
+
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

@@ -67,18 +67,20 @@
                                                     </td>
                                                     <td>
                                                         <div class="action-dots float-end">
-                                                            <a href="#" class="" data-bs-toggle="dropdown"
+                                                            <button href="#" class="btn" data-bs-toggle="dropdown"
                                                                 aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
-                                                            </a>
+                                                            </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
                                                                 <li><a class="dropdown-item" href="job-detail.html"> <i
                                                                             class="fa fa-eye" aria-hidden="true"></i>
                                                                         View</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
+                                                                <li><a class="dropdown-item"
+                                                                        href="{{ route('edit-job', $job->id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
-                                                                <li><a class="dropdown-item" href="#"><i
+
+                                                                <li><a class="dropdown-item" href=""><i
                                                                             class="fa fa-trash" aria-hidden="true"></i>
                                                                         Remove</a></li>
                                                             </ul>
