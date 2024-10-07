@@ -8,6 +8,7 @@ use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -201,12 +202,17 @@ class AuthController extends Controller
 
     public function myJobs()
     {
-        $jobs = Job::where('user_id', Auth::user()->id)->with('JobType')->paginate(2);
+
+        $jobs = Job::where('user_id', Auth::user()->id)
+            ->where('is_delete', 0) // Exclude deleted jobs
+            ->with('JobType')
+            ->paginate(2);
 
         return view('front.jobs.myJobs', [
             'jobs' => $jobs
         ]);
     }
+
 
     public function editJob(Request $request, $id)
     {
@@ -285,9 +291,51 @@ class AuthController extends Controller
         return redirect()->route('my-job')->with('success', 'Job updated successfully!');
     }
 
+
+
+    public function deleteJob(Request $request)
+    {
+        // Check if job exists and belongs to the authenticated user
+        $job = DB::table('jobs_')
+            ->where('user_id', Auth::user()->id)
+            ->where('id', $request->id)
+            ->first();
+
+        if (!$job) {
+            return redirect()->back()->with('error', 'Job not found or already deleted');
+        }
+
+        // Mark the job as deleted (set is_delete to 1)
+        DB::table('jobs_')->where('id', $request->id)->update(['is_delete' => 1]);
+
+        return redirect(route('my-job'))->with('success', 'Job deleted successfully');
+    }
+
     public function logout()
     {
         Auth::logout();
         return redirect()->route('login')->with('warning', 'succefully loged out');
     }
+
+
+    //for feature implementation restoring data
+    //     public function restoreJob($id)
+    // {
+    //     // Check if the job exists and is deleted
+    //     $job = DB::table('jobs')
+    //         ->where('user_id', Auth::user()->id)
+    //         ->where('id', $id)
+    //         ->where('is_delete', 1) // Only deleted jobs
+    //         ->first();
+
+    //     if (!$job) {
+    //         return redirect()->back()->with('error', 'Job not found or not deleted');
+    //     }
+
+    //     // Restore the job (set is_delete to 0)
+    //     DB::table('jobs')->where('id', $id)->update(['is_delete' => 0]);
+
+    //     return redirect(route('my-job'))->with('success', 'Job restored successfully');
+    // }
+
 }

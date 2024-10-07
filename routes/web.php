@@ -23,6 +23,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-jobs', [AuthController::class, 'myJobs'])->name('my-job');
     Route::get('/edit-jobs/{id}', [AuthController::class, 'editJob'])->name('edit-job');
     Route::post('/update-job/{id}', [AuthController::class, 'updateJob'])->name('update-job');
+    Route::post('/delete-job/{id}', [AuthController::class, 'deleteJob'])->name('delete-job');
+    // Route for restoring a deleted job*future
+    //Route::post('/restore-job/{id}', [AuthController::class, 'restoreJob'])->name('restore-job');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
