@@ -73,4 +73,19 @@ class JobController extends Controller
             'jobsTypeArray' =>  $jobsTypeArray
         ]);
     }
+    public function jobDetail($id)
+    {
+        //fetching job details form db
+        $job = Job::where([
+            'id' => $id,
+            'status' => 1
+        ])->with(['jobType', 'category'])->first();
+
+
+        if ($job == null) {
+            abort(404);
+        }
+
+        return view('front.jobs.jobDetails', ['job' => $job]);
+    }
 }
