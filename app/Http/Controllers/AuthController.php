@@ -207,7 +207,7 @@ class AuthController extends Controller
             ->where('is_delete', 0) // Exclude deleted jobs
             ->with('JobType')
             ->orderBy('created_at', 'DESC')
-            ->paginate(2);
+            ->paginate(5);
 
         return view('front.jobs.myJobs', [
             'jobs' => $jobs
