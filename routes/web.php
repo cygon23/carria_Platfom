@@ -2,10 +2,12 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\JobController;
 use Illuminate\Support\Facades\Route;
 
-
+//public url
 Route::get('/', [homeController::class, 'index']);
+Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/jobs');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register']);
@@ -26,6 +28,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/delete-job/{id}', [AuthController::class, 'deleteJob'])->name('delete-job');
     // Route for restoring a deleted job*future
     //Route::post('/restore-job/{id}', [AuthController::class, 'restoreJob'])->name('restore-job');
+
+
+
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
