@@ -9172,7 +9172,7 @@ h1 {
   font-size: 66px;
 }
 h1 span {
-  color: #A8DF8E;
+  color: #FE047F;
 }
 h2 {
   font-size: 30px;
@@ -9182,7 +9182,7 @@ h2 {
 h2:after {
   content: "";
   position: absolute;
-  background-color: #A8DF8E;
+  background-color: #FE047F;
   width: 70px;
   height: 4px;
   bottom: 0px;
@@ -9219,7 +9219,7 @@ p span, q span {
   font-size: inherit;
 }
 a {
-  color: #A8DF8E;
+  color: #FE047F;
 }
 a:hover {
   color: #000;
@@ -9247,8 +9247,8 @@ button, .btn {
 }
 button.btn-primary, .btn.btn-primary {
   color: #ffffff;
-  background: #A8DF8E;
-  border: 2px solid #A8DF8E;
+  background: #FE047F;
+  border: 2px solid #FE047F;
 }
 button.btn-primary:hover, button.btn-primary:focus, .btn.btn-primary:hover, .btn.btn-primary:focus {
   border: 2px solid #242021;
@@ -9260,13 +9260,13 @@ button.btn-secondary, .btn.btn-secondary {
   border: 2px solid #242021;
 }
 button.btn-secondary:hover, button.btn-secondary:focus, .btn.btn-secondary:hover, .btn.btn-secondary:focus {
-  border: 2px solid #A8DF8E;
-  background: #A8DF8E;
+  border: 2px solid #FE047F;
+  background: #FE047F;
   color: #ffffff;
 }
 button.btn-outline-primary, .btn.btn-outline-primary {
-  color: #A8DF8E;
-  border: 2px solid #A8DF8E;
+  color: #FE047F;
+  border: 2px solid #FE047F;
 }
 button.btn-outline-primary:hover, button.btn-outline-primary:focus, .btn.btn-outline-primary:hover, .btn.btn-outline-primary:focus {
   background: transparent;
@@ -9571,7 +9571,7 @@ label .req {
   font-size: 1em;
 }
 footer .nav-link {
-  color: #A8DF8E;
+  color: #FE047F;
 }
 .section-5 .card .thead, .section-5 .card tbody, .section-5 .card tfoot, .section-5 .card tr, .section-5 .card td, .section-5 .card th {
   border-bottom: 1px solid rgba(0, 0, 0, 0.125);
@@ -9597,7 +9597,7 @@ footer .nav-link {
   padding: 10px 40px 10px 15px;
 }
 .section-5 .card .dropdown-menu .dropdown-item:hover {
-  background: #A8DF8E;
+  background: #FE047F;
   color: #ffffff;
 }
 .section-5 .card .dropdown-menu .dropdown-item:hover i {
@@ -9617,7 +9617,7 @@ footer .nav-link {
   color: #000;
 }
 .section-5 .account-nav ul li a:hover {
-  color: #A8DF8E;
+  color: #FE047F;
 }
 @font-face {
   font-family: 'fontello';
