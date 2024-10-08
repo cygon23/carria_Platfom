@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Route;
 //public url
 Route::get('/', [homeController::class, 'index']);
 Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/jobs');
+Route::get('/account/jobs/detail/{id}', [JobController::class, 'jobDetail'])->name('/account/jobs/detail');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register']);
