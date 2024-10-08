@@ -11,8 +11,8 @@
                 <div class="col-6 col-md-2">
                     <div class="align-end">
                         <select name="sort" id="sort" class="form-control">
-                            <option value="">Latest</option>
-                            <option value="">Oldest</option>
+                            <option value="1" {{ Request::get('sort') == '1' ? 'selected' : '' }}>Latest</option>
+                            <option value="0"{{ Request::get('sort') == '0' ? 'selected' : '' }}>Oldest</option>
                         </select>
                     </div>
                 </div>
@@ -40,7 +40,8 @@
                                     <option value="">Select a Category</option>
                                     @if ($categories)
                                         @foreach ($categories as $category)
-                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            <option {{ Request::get('category') == $category->id ? 'selected' : '' }}
+                                                value="{{ $category->id }}">{{ $category->name }}</option>
                                         @endforeach
                                     @endif
 
@@ -52,9 +53,10 @@
                                 @if ($jobTypes)
                                     @foreach ($jobTypes as $jobType)
                                         <div class="form-check mb-2">
-                                            <input class="form-check-input " name="job_type" type="checkbox"
+                                            <input {{ in_array($jobType->id, $jobsTypeArray) ? 'checked' : '' }}
+                                                class="form-check-input " name="job_type" type="checkbox"
                                                 value="{{ $jobType->id }}" id="jobType_{{ $jobType->id }}">
-                                            <!-- Corrected here -->
+
                                             <label class="form-check-label "
                                                 for="jobType_{{ $jobType->id }}">{{ $jobType->name }}</label>
                                         </div>
@@ -66,20 +68,32 @@
                                 <h2>Experience</h2>
                                 <select name="experience" id="experience" class="form-control">
                                     <option value="">Select Experience</option>
-                                    <option value="">1 Year</option>
-                                    <option value="">2 Years</option>
-                                    <option value="">3 Years</option>
-                                    <option value="">4 Years</option>
-                                    <option value="">5 Years</option>
-                                    <option value="">6 Years</option>
-                                    <option value="">7 Years</option>
-                                    <option value="">8 Years</option>
-                                    <option value="">9 Years</option>
-                                    <option value="">10 Years</option>
-                                    <option value="">10+ Years</option>
+                                    <option value="1"{{ Request::get('experience') == 1 ? 'selected' : '' }}>1 Year
+                                    </option>
+                                    <option value="2"{{ Request::get('experience') == 2 ? 'selected' : '' }}>2 Years
+                                    </option>
+                                    <option value="3"{{ Request::get('experience') == 3 ? 'selected' : '' }}>3 Years
+                                    </option>
+                                    <option value="4"{{ Request::get('experience') == 4 ? 'selected' : '' }}>4 Years
+                                    </option>
+                                    <option value="5"{{ Request::get('experience') == 5 ? 'selected' : '' }}>5 Years
+                                    </option>
+                                    <option value="6"{{ Request::get('experience') == 6 ? 'selected' : '' }}>6 Years
+                                    </option>
+                                    <option value="7"{{ Request::get('experience') == 7 ? 'selected' : '' }}>7 Years
+                                    </option>
+                                    <option value="8"{{ Request::get('experience') == 8 ? 'selected' : '' }}>8 Years
+                                    </option>
+                                    <option value="9"{{ Request::get('experience') == 9 ? 'selected' : '' }}>9 Years
+                                    </option>
+                                    <option value="10"{{ Request::get('experience') == 10 ? 'selected' : '' }}>10 Years
+                                    </option>
+                                    <option value="10_plus"{{ Request::get('experience') == '10_plus' ? 'selected' : '' }}>
+                                        10+ Years</option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary">Search</button>
+                            <a href="{{ route('/account/jobs') }}" class="btn btn-secondary mt-3">Reset</a>
                         </div>
                     </form>
                 </div>
@@ -141,16 +155,58 @@
         $("#searchForm").submit(function(e) {
             e.preventDefault();
 
+
             var url = "{{ route('/account/jobs') }}";
             var keyword = $("#keywords").val();
+            var location = $("#location").val();
+            var category = $("#category").val();
+            var experience = $("#experience").val();
+            var sort = $("#sort").val();
+
+            //check box when selected
+            var checkedJobTypes = $("input:checkbox[name='job_type']:checked").map(function() {
+                return $(this).val();
+            }).get();
 
             // If the keyword has a value
             if (keyword != "") {
-                // Append keyword as a query parameter to the URL
+
                 url += '?keyword=' + encodeURIComponent(keyword);
             }
 
+            // If the location has a value
+            if (location != "") {
+
+                url += '?location=' + encodeURIComponent(location);
+            }
+
+            // If the Category has a value
+            if (category != "") {
+
+                url += '?category=' + encodeURIComponent(category);
+            }
+
+
+            // If the Experience has a value
+            if (experience != "") {
+
+                url += '?experience=' + encodeURIComponent(experience);
+            }
+
+            // if user has checked job types
+            if (checkedJobTypes.length > 0) {
+                url += '?jobType=' + encodeURIComponent(checkedJobTypes);
+            }
+
+            //sorting basing on the oldest and newest
+
+            url += '&sort=' + sort;
+
             window.location.href = url;
+        });
+
+        $("#sort").change(function() {
+            $("#searchForm").submit();
         });
     </script>
 @endsection

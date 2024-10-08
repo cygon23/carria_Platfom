@@ -31,7 +31,7 @@
                             <a class="nav-link" aria-current="page" href="{{ url('/') }}">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" href="jobs.html">Find Jobs</a>
+                            <a class="nav-link" aria-current="page" href="{{ route('/account/jobs') }}">Find Jobs</a>
                         </li>
                     </ul>
                     @if (Auth::check())

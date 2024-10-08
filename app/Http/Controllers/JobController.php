@@ -38,6 +38,9 @@ class JobController extends Controller
             $jobs = $jobs->where('category_id', $request->category);
         }
 
+
+        //to mark checked box
+        $jobsTypeArray = [];
         //searching using job Type  user can join arous types such location,types etc
 
         if (!empty($request->jobType)) {
@@ -45,25 +48,29 @@ class JobController extends Controller
             $jobs = $jobs->whereIn('job_type_id', $jobsTypeArray);
         }
 
-
-
-
         //searching using Exeprience
 
         if (!empty($request->experience)) {
             $jobs = $jobs->where('experience', $request->experience);
         }
 
-        $jobs = $jobs->with(['JobType', 'category'])
-            ->orderBy('created_at', 'DESC')
-            ->paginate(9);
+        $jobs = $jobs->with(['JobType', 'category']);
+        //condition for sorting
+        if ($request->sort == '0') {
+            $jobs =  $jobs->orderBy('created_at', 'ASC');
+        } else {
+            $jobs =  $jobs->orderBy('created_at', 'DESC');
+        }
+
+        $jobs =  $jobs->paginate(9);
 
 
 
         return view('front.jobs.jobs', [
             'categories' =>   $categories,
             'jobTypes' =>   $jobTypes,
-            'jobs' => $jobs
+            'jobs' => $jobs,
+            'jobsTypeArray' =>  $jobsTypeArray
         ]);
     }
 }
