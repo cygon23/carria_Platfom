@@ -19,6 +19,7 @@
         <div class="container job_details_area">
             <div class="row pb-5">
                 <div class="col-md-8">
+                    @include('front.layouts._message')
                     <div class="card shadow border-0">
                         <div class="job_details_header">
                             <div class="single_jobs white-bg d-flex justify-content-between">
@@ -76,9 +77,18 @@
                             </div>
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
+                                @if (Auth::check())
+                                    <form action="{{ route('apply-job') }}" method="POST" style="display: inline;">
+                                        @csrf <!-- CSRF protection -->
+                                        <input type="hidden" name="id" value="{{ $job->id }}">
+                                        <button type="submit" class="btn btn-primary">Apply</button>
+                                    </form>
+                                @else
+                                    <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Apply</a>
+                                @endif
                                 <a href="#" class="btn btn-secondary">Save</a>
-                                <a href="#" class="btn btn-primary">Apply</a>
                             </div>
+
                         </div>
                     </div>
                 </div>
