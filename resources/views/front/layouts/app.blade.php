@@ -3,7 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>CareerVibe | Find Best Jobs</title>
+    <title>Career | Find Best Jobs</title>
     <meta name="description" content="" />
     <meta name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no, maximum-scale=1, user-scalable=no" />
@@ -13,13 +13,19 @@
     <link rel="stylesheet" type="text/css" href="{{ url('assets/css/style.css') }}" />
     <!-- Fav Icon -->
     <link rel="shortcut icon" type="image/x-icon" href="#" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM6bW1Ht3y9Y7KpUbsj2/zUr3pcf12u3L0/Qe" crossorigin="anonymous">
+
 </head>
 
 <body data-instant-intensity="mousedown">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow py-3">
             <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">CJB</a>
+                <a class="navbar-brand" href="{{ url('/') }}">
+                    <img src="{{ asset('assets/images/logo.png') }}" alt="Logo" style="height: 40px;">
+                </a>
+
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +82,7 @@
 
     <footer class="bg-dark py-3 bg-2">
         <div class="container">
-            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 xyz company, all right reserved</p>
+            <p class="text-center text-white pt-3 fw-bold fs-6">© 2023 cerria company, all right reserved</p>
         </div>
     </footer>
     <script src="{{ url('assets/js/jquery-3.6.0.min.js') }}"></script>
