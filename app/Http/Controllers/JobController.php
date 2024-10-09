@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+
 
 class JobController extends Controller
 {
@@ -87,5 +91,52 @@ class JobController extends Controller
         }
 
         return view('front.jobs.jobDetails', ['job' => $job]);
+    }
+
+
+    public function applyJob(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:jobs_,id',
+        ]);
+
+        $id = $request->id;
+        $job = Job::where('id', $id)->first();
+
+        // If job is not found
+        if ($job === null) {
+            return redirect()->back()->with('error', 'Oops! Job not yet uploaded.');
+        }
+
+        // Uploaded job cannot be applied by the same person
+        $employer_id = $job->user_id;
+        if ($employer_id == Auth::user()->id) {
+            return redirect()->back()->with('error', 'You cannot apply for your own job.');
+        }
+
+
+        //you can not apply the job twice
+        $jobApplicationCount = JobApplication::where([
+            'user_id' => Auth::user()->id,
+            'job_id' => $id
+        ])->count();
+
+        if ($jobApplicationCount > 0) {
+            return redirect()->back()->with('error', 'It appears that you have already applied for this position Please check your application status for any updates.');
+        }
+        // Create the application
+        try {
+            $application = new JobApplication();
+            $application->job_id = $id;
+            $application->user_id = Auth::user()->id; // Applicant's ID
+            $application->employer_id = $employer_id; // Store employer ID if needed
+            $application->applied_date = now();
+            $application->save();
+
+            return redirect()->back()->with('success', 'Application done successfully');
+        } catch (\Exception $e) {
+            Log::error("Job application error: " . $e->getMessage());  // Log the error
+            return redirect()->back()->with('error', 'An error occurred while applying for the job.');
+        }
     }
 }
