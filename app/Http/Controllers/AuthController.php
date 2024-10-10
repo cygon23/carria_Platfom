@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobType;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -339,4 +340,13 @@ class AuthController extends Controller
     //     return redirect(route('my-job'))->with('success', 'Job restored successfully');
     // }
 
+    //for jobApplied by individual
+    public function myJobApplication()
+    {
+        $jobApplication = JobApplication::first();
+        dd($jobApplication->job);
+
+
+        return view('front.jobs.myJobApplication');
+    }
 }

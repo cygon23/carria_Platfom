@@ -30,7 +30,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/delete-job/{id}', [AuthController::class, 'deleteJob'])->name('delete-job');
     // Route for restoring a deleted job*future
     //Route::post('/restore-job/{id}', [AuthController::class, 'restoreJob'])->name('restore-job');
-
+    Route::get('/jobApplications', [AuthController::class, 'myJobApplication'])->name('jobApplications');
 
 
 

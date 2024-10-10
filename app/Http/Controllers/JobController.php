@@ -137,13 +137,13 @@ class JobController extends Controller
 
 
             //send notification email to employer
-            $employer = User::where('id', $employer_id)->first();
-            $mailData = [
-                'employer' => $employer,
-                'user' => Auth::user(),
-                'job' => $job
-            ];
-            Mail::to($employer->email)->send(new JobNotificationMail($mailData));
+            // $employer = User::where('id', $employer_id)->first();
+            // $mailData = [
+            //     'employer' => $employer,
+            //     'user' => Auth::user(),
+            //     'job' => $job
+            // ];
+            // Mail::to($employer->email)->send(new JobNotificationMail($mailData));
 
             return redirect()->back()->with('success', 'Application done successfully');
         } catch (\Exception $e) {
