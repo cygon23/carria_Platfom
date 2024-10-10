@@ -357,24 +357,83 @@ class AuthController extends Controller
 
 
 
+    // public function myJobApplication()
+
+    // {
+
+    //     // Fetch job applications for the authenticated user
+    //     $jobApplications = DB::table('job_applications')
+    //         ->where('job_applications.user_id', Auth::user()->id)
+    //         ->where('job_applications.is_delete', 0)
+    //         ->join('jobs_', 'job_applications.job_id', '=', 'jobs_.id')
+    //         ->select(
+    //             'job_applications.*',
+    //             'jobs_.title',
+    //             'jobs_.location',
+    //             'jobs_.status',
+    //             'jobs_.created_at as job_created_at',
+    //             'job_applications.applied_date'
+    //         )
+    //         ->paginate(3);
+
+    //     //for job count
+    //     $totalJobCount = DB::table('job_applications')
+    //         ->where('user_id', Auth::user()->id)
+    //         ->where('is_delete', 0)
+    //         ->count();
+
+    //     return view('front.jobs.myJobApplication', [
+    //         'jobApplications' => $jobApplications,
+    //         'totalJobCount' => $totalJobCount // Remove the extra space here
+    //     ]);
+    // }
+
     public function myJobApplication()
-
     {
-
         // Fetch job applications for the authenticated user
         $jobApplications = DB::table('job_applications')
             ->where('job_applications.user_id', Auth::user()->id)
+            ->where('job_applications.is_delete', 0)
             ->join('jobs_', 'job_applications.job_id', '=', 'jobs_.id')
             ->select(
-                'job_applications.*',
+                'job_applications.job_id',
                 'jobs_.title',
                 'jobs_.location',
                 'jobs_.status',
-                'jobs_.created_at as job_created_at'
+                'jobs_.created_at as job_created_at',
+                'job_applications.applied_date'
             )
+            ->groupBy('job_applications.job_id', 'jobs_.title', 'jobs_.location', 'jobs_.status', 'jobs_.created_at', 'job_applications.applied_date')
             ->paginate(3);
 
+        // Count total applicants for each job
+        $totalJobCounts = DB::table('job_applications')
+            ->select('job_id', DB::raw('COUNT(DISTINCT user_id) as total_applicants')) // Count distinct user IDs
+            ->where('is_delete', 0) // Ensure to only count non-deleted applications
+            ->groupBy('job_id') // Group by job ID
+            ->get()
+            ->keyBy('job_id'); // Key the results by job ID
 
-        return view('front.jobs.myJobApplication', ['jobApplications' => $jobApplications]);
+
+
+        return view('front.jobs.myJobApplication', [
+            'jobApplications' => $jobApplications,
+            'totalJobCounts' => $totalJobCounts // Pass the counts to the view
+        ]);
+    }
+
+
+
+    public function removeJob($jobId)
+    {
+        $jobApplication = DB::table('job_applications')->where('id', $jobId)->first();
+
+        if ($jobApplication) {
+            DB::table('job_applications')->where('id', $jobId)->update(['is_delete' => 1]);
+
+            return redirect()->back()->with('success', 'Job application removed successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Job application not found.');
     }
 }
