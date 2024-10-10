@@ -7,8 +7,9 @@ use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\SaveJob;
 use App\Models\User;
-use Illuminate\Container\Attributes\DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -96,39 +97,44 @@ class JobController extends Controller
         return view('front.jobs.jobDetails', ['job' => $job]);
     }
 
-    // public function saveJob(Request $request)
-    // {
-    //     // Validate the incoming request data
-    //     $request->validate([
-    //         'id' => 'required|exists:jobs,id', // Ensure the job ID exists in the jobs table
-    //     ]);
 
-    //     // Get the authenticated user's ID
-    //     $userId = Auth::id();
-    //     $jobId = $request->input('id');
+    public function saveJob(Request $request)
+    {
 
-    //     // Check if the job is already saved by this user
-    //     $savedJob = DB::table('saved_jobs')
-    //         ->where('user_id', $userId)
-    //         ->where('job_id', $jobId)
-    //         ->first();
+        $request->validate([
+            'id' => 'required|exists:jobs_,id',
+        ]);
 
-    //     if ($savedJob) {
-    //         return back()->with('error', 'You have already saved this job.'); // Inform the user if job is already saved
-    //     }
+        $userId = Auth::id();
+        $jobId = $request->input('id');
 
-    //     // Save the job to the saved_jobs table
-    //     DB::table('saved_jobs')->insert([
-    //         'user_id' => $userId,
-    //         'job_id' => $jobId,
-    //         'created_at' => now(),
-    //         'updated_at' => now(),
-    //     ]);
+        $jobExists = DB::table('jobs_')->where('id', $jobId)->exists();
 
-    //     return view('front.jobs.jobDetails', ['savedJob' => $savedJob]);
+        if (!$jobExists) {
+            return back()->with('error', 'The job does not exist.');
+        }
 
-    //     return redirect(route('/account/jobs/detail'))->with('success', 'Job saved successfully!'); // Inform the user of success
-    // }
+        $savedJob = DB::table('saved_jobs')
+            ->where('user_id', $userId)
+            ->where('job_id', $jobId)
+            ->first();
+
+        if ($savedJob) {
+            return back()->with('error', 'You have already saved this job.');
+        }
+
+
+
+        // Save the job to the saved_jobs table
+        DB::table('saved_jobs')->insert([
+            'user_id' => $userId,
+            'job_id' => $jobId,
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+        return back()->with('success', 'Job saved successfully!'); // Inform the user of success
+    }
 
 
     public function applyJob(Request $request)
