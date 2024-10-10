@@ -77,6 +77,17 @@
                             </div>
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
+
+                                @if (Auth::check())
+                                    <form action="{{ route('save-job') }}" method="POST" style="display: inline;">
+                                        @csrf <!-- CSRF protection -->
+                                        <input type="hidden" name="id" value="{{ $job->id }}">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </form>
+                                @else
+                                    <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Save</a>
+                                @endif
+
                                 @if (Auth::check())
                                     <form action="{{ route('apply-job') }}" method="POST" style="display: inline;">
                                         @csrf <!-- CSRF protection -->
@@ -86,7 +97,7 @@
                                 @else
                                     <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Apply</a>
                                 @endif
-                                <a href="#" class="btn btn-secondary">Save</a>
+
                             </div>
 
                         </div>

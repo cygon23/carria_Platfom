@@ -8,6 +8,7 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
 use App\Models\User;
+use Illuminate\Container\Attributes\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -94,6 +95,40 @@ class JobController extends Controller
 
         return view('front.jobs.jobDetails', ['job' => $job]);
     }
+
+    // public function saveJob(Request $request)
+    // {
+    //     // Validate the incoming request data
+    //     $request->validate([
+    //         'id' => 'required|exists:jobs,id', // Ensure the job ID exists in the jobs table
+    //     ]);
+
+    //     // Get the authenticated user's ID
+    //     $userId = Auth::id();
+    //     $jobId = $request->input('id');
+
+    //     // Check if the job is already saved by this user
+    //     $savedJob = DB::table('saved_jobs')
+    //         ->where('user_id', $userId)
+    //         ->where('job_id', $jobId)
+    //         ->first();
+
+    //     if ($savedJob) {
+    //         return back()->with('error', 'You have already saved this job.'); // Inform the user if job is already saved
+    //     }
+
+    //     // Save the job to the saved_jobs table
+    //     DB::table('saved_jobs')->insert([
+    //         'user_id' => $userId,
+    //         'job_id' => $jobId,
+    //         'created_at' => now(),
+    //         'updated_at' => now(),
+    //     ]);
+
+    //     return view('front.jobs.jobDetails', ['savedJob' => $savedJob]);
+
+    //     return redirect(route('/account/jobs/detail'))->with('success', 'Job saved successfully!'); // Inform the user of success
+    // }
 
 
     public function applyJob(Request $request)
