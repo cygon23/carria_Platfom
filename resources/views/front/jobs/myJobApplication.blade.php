@@ -27,10 +27,7 @@
                             @endif
                             <div class="d-flex justify-content-between">
                                 <div>
-                                    <h3 class="fs-4 mb-1">My Jobs</h3>
-                                </div>
-                                <div style="margin-top: -10px;">
-                                    <a href="{{ route('create-job') }}" class="btn btn-primary">Post a Job</a>
+                                    <h3 class="fs-4 mb-1">Jobs Applied</h3>
                                 </div>
                             </div>
                             <div class="table-responsive">
@@ -38,7 +35,7 @@
                                     <thead class="bg-light">
                                         <tr>
                                             <th scope="col">Title</th>
-                                            <th scope="col">Job Created</th>
+                                            <th scope="col">Applied Date</th>
                                             <th scope="col">Applicants</th>
                                             <th scope="col">Status</th>
                                             <th scope="col">Action</th>
@@ -55,9 +52,19 @@
                                                             <!-- Access location -->
                                                         </div>
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($jobApplication->job_created_at)->format('d M, Y') }}
+                                                    <td>{{ \Carbon\Carbon::parse($jobApplication->applied_date)->format('d M, Y') }}
                                                     </td>
-                                                    <td>0 Applications</td>
+                                                    <td>
+                                                        @php
+                                                            // Get the job ID for the current job application
+                                                            $jobId = $jobApplication->job_id;
+                                                            // Fetch the total applicants count for this job
+                                                            $applicantCount = $totalJobCounts->get($jobId);
+                                                        @endphp
+                                                        {{-- Display the applicant count, defaulting to 0 if not found --}}
+                                                        {{ $applicantCount ? $applicantCount->total_applicants : 0 }}
+                                                        Applicants
+                                                    </td>
                                                     <td>
                                                         @if ($jobApplication->status == 1)
                                                             <div class="job-status text-capitalize">Active</div>
@@ -72,17 +79,18 @@
                                                                 <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end">
-                                                                <li><a class="dropdown-item" href="job-detail.html"> <i
-                                                                            class="fa fa-eye" aria-hidden="true"></i>
-                                                                        View</a></li>
                                                                 <li><a class="dropdown-item"
+                                                                        href="{{ route('/account/jobs/detail', $jobApplication->job_id) }}">
+                                                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                                                        View</a></li>
+                                                                {{-- <li><a class="dropdown-item"
                                                                         href="{{ route('edit-job', $jobApplication->job_id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
-                                                                        Edit</a></li>
+                                                                        Edit</a></li> --}}
 
                                                                 <li>
                                                                     <form
-                                                                        action="{{ route('delete-job', $jobApplication->job_id) }}"
+                                                                        action="{{ route('delete-Appliedjob', $jobApplication->job_id) }}"
                                                                         method="POST" style="display: inline;">
                                                                         @csrf
                                                                         @method('POST')
