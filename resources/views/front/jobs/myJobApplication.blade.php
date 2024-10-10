@@ -1,6 +1,5 @@
 @extends('front.layouts.app')
 
-
 @section('main')
     <section class="section-5 bg-2">
         <div class="container py-5">
@@ -16,7 +15,6 @@
             </div>
             <div class="row">
                 <div class="col-lg-3">
-
                     @include('auth.sidebar')
                 </div>
                 <div class="col-lg-9">
@@ -34,10 +32,9 @@
                                 <div style="margin-top: -10px;">
                                     <a href="{{ route('create-job') }}" class="btn btn-primary">Post a Job</a>
                                 </div>
-
                             </div>
                             <div class="table-responsive">
-                                <table class="table ">
+                                <table class="table">
                                     <thead class="bg-light">
                                         <tr>
                                             <th scope="col">Title</th>
@@ -48,21 +45,21 @@
                                         </tr>
                                     </thead>
                                     <tbody class="border-0">
-                                        @if ($jobs->isNotEmpty())
-                                            @foreach ($jobs as $job)
+                                        @if ($jobApplications->isNotEmpty())
+                                            @foreach ($jobApplications as $jobApplication)
                                                 <tr class="active">
                                                     <td>
                                                         <div class="job-name fw-500">
-                                                            {{ $jobApplications->$jobApplication }}</div>
-                                                        <div class="info1">{{ $$jobApplication->JobType->job->name }} .
-                                                            {{ $jobApplication->job->location }}
+                                                            {{ $jobApplication->title }}</div> <!-- Access the job title -->
+                                                        <div class="info1">{{ $jobApplication->location }}
+                                                            <!-- Access location -->
                                                         </div>
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($jobApplication->created_at)->format('d M, Y') }}
+                                                    <td>{{ \Carbon\Carbon::parse($jobApplication->job_created_at)->format('d M, Y') }}
                                                     </td>
                                                     <td>0 Applications</td>
                                                     <td>
-                                                        @if ($jobApplication->job->status == 1)
+                                                        @if ($jobApplication->status == 1)
                                                             <div class="job-status text-capitalize">Active</div>
                                                         @else
                                                             <div class="job-status text-capitalize">Blocked</div>
@@ -79,18 +76,19 @@
                                                                             class="fa fa-eye" aria-hidden="true"></i>
                                                                         View</a></li>
                                                                 <li><a class="dropdown-item"
-                                                                        href="{{ route('edit-job', $job->id) }}"><i
+                                                                        href="{{ route('edit-job', $jobApplication->job_id) }}"><i
                                                                             class="fa fa-edit" aria-hidden="true"></i>
                                                                         Edit</a></li>
 
                                                                 <li>
-                                                                    <form action="{{ route('delete-job', $job->id) }}"
+                                                                    <form
+                                                                        action="{{ route('delete-job', $jobApplication->job_id) }}"
                                                                         method="POST" style="display: inline;">
                                                                         @csrf
                                                                         @method('POST')
                                                                         <button type="submit" class="dropdown-item"
                                                                             style="border: none; background: none; cursor: pointer;">
-                                                                            <i class="fa fa-edit" aria-hidden="true"></i>
+                                                                            <i class="fa fa-trash" aria-hidden="true"></i>
                                                                             Remove
                                                                         </button>
                                                                     </form>
@@ -106,7 +104,6 @@
                                             </tr>
                                         @endif
                                     </tbody>
-
                                 </table>
                             </div>
                         </div>
@@ -119,25 +116,3 @@
         </div>
     </section>
 @endsection
-
-
-{{--
-@section('customJs')
-    <script type="text/javascript">
-        function deleteJob(id) {
-            if (confirm("Are you sure you want to delete this job?")) {
-                $.ajax({
-                    url: '{{ route('delete-job') }}',
-                    type: 'post',
-                    data: {
-                        id: id
-                    },
-                    dataType: 'json',
-                    success: function(response) {
-
-                    }
-                })
-            }
-        }
-    </script>
-@endsection --}}

@@ -341,12 +341,40 @@ class AuthController extends Controller
     // }
 
     //for jobApplied by individual
+    // public function myJobApplication()
+    // {
+    //     $jobApplication = JobApplication::first();
+    //     //
+
+    //     dd($jobApplication->job);
+
+    //     // $jobApplications  = JobApplication::where('user_id', Auth::user()->id)->with(['job', 'job.jobType'])->paginate(5);
+    //     // dd($jobApplications);
+
+
+    //     return view('front.jobs.myJobApplication');
+    // }
+
+
+
     public function myJobApplication()
+
     {
-        $jobApplication = JobApplication::first();
-        dd($jobApplication->job);
+
+        // Fetch job applications for the authenticated user
+        $jobApplications = DB::table('job_applications')
+            ->where('job_applications.user_id', Auth::user()->id)
+            ->join('jobs_', 'job_applications.job_id', '=', 'jobs_.id')
+            ->select(
+                'job_applications.*',
+                'jobs_.title',
+                'jobs_.location',
+                'jobs_.status',
+                'jobs_.created_at as job_created_at'
+            )
+            ->paginate(3);
 
 
-        return view('front.jobs.myJobApplication');
+        return view('front.jobs.myJobApplication', ['jobApplications' => $jobApplications]);
     }
 }
