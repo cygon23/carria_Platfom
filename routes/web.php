@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     //Route::post('/restore-job/{id}', [AuthController::class, 'restoreJob'])->name('restore-job');
     Route::get('/jobApplications', [AuthController::class, 'myJobApplication'])->name('jobApplications');
     Route::post('/jobApplications/{jobId}', [AuthController::class, 'removeJob'])->name('delete-Appliedjob');
+    Route::post('/delete-Savedjob/{jobId}', [AuthController::class, 'removeSavedJob'])->name('delete-Savedjob');
     Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
     Route::get('/saved-job-account', [AuthController::class, 'savedJobAccount'])->name('saved-job-account');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');

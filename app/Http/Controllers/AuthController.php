@@ -321,74 +321,6 @@ class AuthController extends Controller
     }
 
 
-    //for feature implementation restoring data
-    //     public function restoreJob($id)
-    // {
-    //     // Check if the job exists and is deleted
-    //     $job = DB::table('jobs')
-    //         ->where('user_id', Auth::user()->id)
-    //         ->where('id', $id)
-    //         ->where('is_delete', 1) // Only deleted jobs
-    //         ->first();
-
-    //     if (!$job) {
-    //         return redirect()->back()->with('error', 'Job not found or not deleted');
-    //     }
-
-    //     // Restore the job (set is_delete to 0)
-    //     DB::table('jobs')->where('id', $id)->update(['is_delete' => 0]);
-
-    //     return redirect(route('my-job'))->with('success', 'Job restored successfully');
-    // }
-
-    //for jobApplied by individual
-    // public function myJobApplication()
-    // {
-    //     $jobApplication = JobApplication::first();
-    //     //
-
-    //     dd($jobApplication->job);
-
-    //     // $jobApplications  = JobApplication::where('user_id', Auth::user()->id)->with(['job', 'job.jobType'])->paginate(5);
-    //     // dd($jobApplications);
-
-
-    //     return view('front.jobs.myJobApplication');
-    // }
-
-
-
-    // public function myJobApplication()
-
-    // {
-
-    //     // Fetch job applications for the authenticated user
-    //     $jobApplications = DB::table('job_applications')
-    //         ->where('job_applications.user_id', Auth::user()->id)
-    //         ->where('job_applications.is_delete', 0)
-    //         ->join('jobs_', 'job_applications.job_id', '=', 'jobs_.id')
-    //         ->select(
-    //             'job_applications.*',
-    //             'jobs_.title',
-    //             'jobs_.location',
-    //             'jobs_.status',
-    //             'jobs_.created_at as job_created_at',
-    //             'job_applications.applied_date'
-    //         )
-    //         ->paginate(3);
-
-    //     //for job count
-    //     $totalJobCount = DB::table('job_applications')
-    //         ->where('user_id', Auth::user()->id)
-    //         ->where('is_delete', 0)
-    //         ->count();
-
-    //     return view('front.jobs.myJobApplication', [
-    //         'jobApplications' => $jobApplications,
-    //         'totalJobCount' => $totalJobCount // Remove the extra space here
-    //     ]);
-    // }
-
     public function myJobApplication()
     {
         // Fetch job applications for the authenticated user
@@ -428,11 +360,10 @@ class AuthController extends Controller
 
     public function savedJobAccount()
     {
-        // Fetch saved jobs for the authenticated user
         $savedJobs = DB::table('saved_jobs')
             ->join('jobs_', 'saved_jobs.job_id', '=', 'jobs_.id')
             ->select(
-                'saved_jobs.id as saved_job_id', // Use alias to avoid confusion
+                'saved_jobs.id as saved_job_id', //  alias to avoid confusion
                 'jobs_.id as job_id',
                 'jobs_.title',
                 'jobs_.location',
@@ -440,8 +371,9 @@ class AuthController extends Controller
                 'saved_jobs.created_at as saved_at' // The time when the job was saved
             )
             ->where('saved_jobs.user_id', Auth::user()->id)
+            ->where('saved_jobs.is_delete', 0)
             ->orderBy('saved_at', 'DESC')
-            ->paginate(10); // Pagination
+            ->paginate(10);
 
 
 
@@ -462,5 +394,27 @@ class AuthController extends Controller
         }
 
         return redirect()->back()->with('error', 'Job application not found.');
+    }
+
+
+    public function removeSavedJob($jobId)
+    {
+
+        $savedJob = DB::table('saved_jobs')
+            ->where('job_id', $jobId)
+            ->where('user_id', Auth::id())
+            ->where('is_delete', 0)
+            ->first();
+
+        if ($savedJob) {
+            DB::table('saved_jobs')
+                ->where('job_id', $jobId)
+                ->where('user_id', Auth::id())
+                ->update(['is_delete' => 1]);
+
+            return redirect()->back()->with('success', 'Saved job removed successfully.');
+        }
+
+        return redirect()->back()->with('error', 'Saved job not found.');
     }
 }

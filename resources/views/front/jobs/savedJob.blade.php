@@ -43,16 +43,15 @@
                                     <tbody class="border-0">
                                         @if ($savedJobs->isNotEmpty())
                                             @foreach ($savedJobs as $savedJob)
-                                                <!-- Use $savedJob here -->
                                                 <tr class="active">
                                                     <td>
                                                         <div class="job-name fw-500">
-                                                            {{ $savedJob->title }}</div> <!-- Access the job title -->
-                                                        <div class="info1">{{ $savedJob->location }}</div>
-                                                        <!-- Access location -->
+                                                            {{ $savedJob->title }}
+                                                            <div class="info1">{{ $savedJob->location }}</div>
+
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($savedJob->saved_at)->format('d M, Y') }}
-                                                    </td> <!-- Display saved date -->
+                                                    </td>
                                                     <td>
                                                         @if ($savedJob->status == 1)
                                                             <div class="job-status text-capitalize">Active</div>
@@ -73,7 +72,7 @@
                                                                         View</a></li>
                                                                 <li>
                                                                     <form
-                                                                        action="{{ route('delete-Appliedjob', $savedJob->job_id) }}"
+                                                                        action="{{ route('delete-Savedjob', $savedJob->job_id) }}"
                                                                         method="POST" style="display: inline;">
                                                                         @csrf
                                                                         @method('POST')
