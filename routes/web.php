@@ -34,10 +34,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/jobApplications', [AuthController::class, 'myJobApplication'])->name('jobApplications');
     Route::post('/jobApplications/{jobId}', [AuthController::class, 'removeJob'])->name('delete-Appliedjob');
     Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
-
-
-
-
-
+    Route::get('/saved-job-account', [AuthController::class, 'savedJobAccount'])->name('saved-job-account');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });

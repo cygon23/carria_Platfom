@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
 use App\Models\JobType;
+use App\Models\SaveJob;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -404,6 +405,7 @@ class AuthController extends Controller
                 'job_applications.applied_date'
             )
             ->groupBy('job_applications.job_id', 'jobs_.title', 'jobs_.location', 'jobs_.status', 'jobs_.created_at', 'job_applications.applied_date')
+            ->orderBy('applied_date', 'DESC')
             ->paginate(3);
 
         // Count total applicants for each job
@@ -418,10 +420,35 @@ class AuthController extends Controller
 
         return view('front.jobs.myJobApplication', [
             'jobApplications' => $jobApplications,
-            'totalJobCounts' => $totalJobCounts // Pass the counts to the view
+            'totalJobCounts' => $totalJobCounts
         ]);
     }
 
+
+
+    public function savedJobAccount()
+    {
+        // Fetch saved jobs for the authenticated user
+        $savedJobs = DB::table('saved_jobs')
+            ->join('jobs_', 'saved_jobs.job_id', '=', 'jobs_.id')
+            ->select(
+                'saved_jobs.id as saved_job_id', // Use alias to avoid confusion
+                'jobs_.id as job_id',
+                'jobs_.title',
+                'jobs_.location',
+                'jobs_.status',
+                'saved_jobs.created_at as saved_at' // The time when the job was saved
+            )
+            ->where('saved_jobs.user_id', Auth::user()->id)
+            ->orderBy('saved_at', 'DESC')
+            ->paginate(10); // Pagination
+
+
+
+        return view('front.jobs.savedJob', [
+            'savedJobs' => $savedJobs
+        ]);
+    }
 
 
     public function removeJob($jobId)
