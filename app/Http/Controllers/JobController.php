@@ -94,7 +94,11 @@ class JobController extends Controller
             abort(404);
         }
 
-        return view('front.jobs.jobDetails', ['job' => $job]);
+        //fetching for applicants
+        $applications = JobApplication::where('job_id', $id)->with('user')->get();
+
+
+        return view('front.jobs.jobDetails', ['job' => $job, 'applications' =>  $applications]);
     }
 
 
