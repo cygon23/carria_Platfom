@@ -82,10 +82,10 @@
                                     <form action="{{ route('save-job') }}" method="POST" style="display: inline;">
                                         @csrf <!-- CSRF protection -->
                                         <input type="hidden" name="id" value="{{ $job->id }}">
-                                        <button type="submit" class="btn btn-primary">Save</button>
+                                        <button type="submit" class="btn btn-secondary">Save</button>
                                     </form>
                                 @else
-                                    <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Save</a>
+                                    <a href="javascript:void(0);" class="btn btn-secondary disabled">Login to Save</a>
                                 @endif
 
                                 @if (Auth::check())
