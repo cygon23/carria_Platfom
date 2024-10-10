@@ -10,7 +10,7 @@ Route::get('/', [homeController::class, 'index']);
 Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/jobs');
 Route::get('/account/jobs/detail/{id}', [JobController::class, 'jobDetail'])->name('/account/jobs/detail');
 Route::post('/apply-job', [JobController::class, 'applyJob'])->name('apply-job');
-Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
+
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register']);
@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function () {
     //Route::post('/restore-job/{id}', [AuthController::class, 'restoreJob'])->name('restore-job');
     Route::get('/jobApplications', [AuthController::class, 'myJobApplication'])->name('jobApplications');
     Route::post('/jobApplications/{jobId}', [AuthController::class, 'removeJob'])->name('delete-Appliedjob');
+    Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
 
 
 
