@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\TestController;
 use Illuminate\Support\Facades\Route;
 
 //public url
@@ -24,7 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/updateProfile', [AuthController::class, 'updateProfile'])->name('updateProfile');
     Route::post('/profileImage', [AuthController::class, 'profileImage'])->name('profileImage');
     Route::get('/create-job', [AuthController::class, 'createJob'])->name('create-job');
-    Route::post('/save-job', [AuthController::class, 'saveJob'])->name('save-job');
+    Route::post('/addjobs', [TestController::class, 'addJobs'])->name('add-jobs');
     Route::get('/my-jobs', [AuthController::class, 'myJobs'])->name('my-job');
     Route::get('/edit-jobs/{id}', [AuthController::class, 'editJob'])->name('edit-job');
     Route::post('/update-job/{id}', [AuthController::class, 'updateJob'])->name('update-job');
