@@ -92,12 +92,12 @@ class AuthController extends Controller
             'name' => 'required|min:5|max:20',
             'email' => 'required|email|unique:users,email,' . $id,
             'mobile' => ['required', 'regex:/^\+?[0-9]{10,15}$/'],
-            'designation' => 'required|string|min:7|max:50',
+            'designation' => 'required|string|min:5|max:50',
         ]);
 
         // If validation fails
         if ($validator->fails()) {
-            session()->flash('error', 'consider length please.');
+            session()->flash('error', 'consider length please.name minmum 5, moblie 10+,desgnation minmum 5');
             return redirect()->back()->withInput()->with('validationErrors', $validator->errors());
         }
 
@@ -144,6 +144,7 @@ class AuthController extends Controller
 
         $job_types = JobType::orderBy('name', 'ASC')->where('status', 1)->get();
 
+
         return view('front.jobs.create', [
             'categories' => $categories,
             'job_types' =>  $job_types,
@@ -151,55 +152,45 @@ class AuthController extends Controller
     }
 
 
-    public function saveJob(Request $request)
-    {
-        // Validation rules
-        $rules = [
-            'title' => 'required|min:5|max:200',
-            'category' => 'required',
-            'job_nature' => 'required',
-            'vacancy' => 'required|integer',
-            'location' => 'required|max:50',
-            'description' => 'required',
-            'keywords' => 'required',
-            'company_name' => 'required|min:3|max:75',
-            'salary' => 'nullable',  // Optional field
-            'benefits' => 'nullable',  // Optional field
-            'responsibility' => 'nullable',  // Optional field
-            'qualification' => 'nullable',  // Optional field
-            'experience' => 'required|integer',  // Mandatory field
-            'company_location' => 'nullable',  // Optional field
-            'company_website' => 'nullable|url'  // Optional field, validate URL format
-        ];
+    // public function addJobs(Request $request)
 
-        // Validate the incoming request using the defined rules
-        $validatedData = $request->validate($rules);
+    // {
 
 
-        // Storing the job data
-        $job = new Job();
+    //     $request->validate([
+    //         'title' => 'required|string|max:255',
+    //         'category' => 'required|integer',
+    //         'job_nature' => 'required|integer',
+    //         'vacancy' => 'required|integer',
+    //         'location' => 'required|string|max:255',
+    //         'description' => 'required|string',
+    //         'experience' => 'required|integer',
+    //         'keywords' => 'required|string',
+    //         'company_name' => 'required|string|max:255',
+    //     ]);
 
-        $job->title = $validatedData['title'];
-        $job->category_id = $validatedData['category']; // Make sure to use category id
-        $job->job_type_id = $validatedData['job_nature']; // Make sure to use job type id
-        $job->user_id = Auth::user()->id;
-        $job->vacancy = $validatedData['vacancy'];
-        $job->salary = $validatedData['salary'] ?? null;
-        $job->location = $validatedData['location'];
-        $job->description = $validatedData['description'];
-        $job->benefits = $validatedData['benefits'] ?? null;
-        $job->responsibility = $validatedData['responsibility'] ?? null;
-        $job->qualification = $validatedData['qualification'] ?? null;
-        $job->keywords = $validatedData['keywords'];
-        $job->experience = $validatedData['experience'];
-        $job->company_name = $validatedData['company_name'];
-        $job->company_location = $validatedData['company_location'] ?? null;  // Optional field
-        $job->company_website = $validatedData['company_website'] ?? null;  // Optional field
-        $job->save();
+    //     Job::create([
+    //         'title' => $request->title,
+    //         'category_id' => $request->category,
+    //         'job_type_id' => $request->job_nature,
+    //         'vacancy' => $request->vacancy,
+    //         'salary' => $request->salary,
+    //         'location' => $request->location,
+    //         'description' => $request->description,
+    //         'benefits' => $request->benefits,
+    //         'responsibility' => $request->responsibility,
+    //         'qualification' => $request->qualification,
+    //         'experience' => $request->experience,
+    //         'keywords' => $request->keywords,
+    //         'company_name' => $request->company_name,
+    //         'company_location' => $request->company_location,
+    //         'company_website' => $request->website,
+    //     ]);
 
-        // Redirect or return a response after successfully saving
-        return redirect()->route('my-job')->with('success', 'Job Added successfully!');
-    }
+    //     return response()->json(['success' => 'Job created successfully!']);
+    // }
+
+
 
 
     public function myJobs()
