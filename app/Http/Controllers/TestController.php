@@ -32,30 +32,29 @@ class TestController extends Controller
         // Validate the incoming request using the defined rules
         $validatedData = $request->validate($rules);
 
-        // Storing the job data using query builder
-        DB::table('jobs_')
+        // Insert the new job data
+        DB::table('jobs_')->insert([
+            'title' => $validatedData['title'],
+            'category_id' => $validatedData['category'], // Use category ID
+            'job_type_id' => $validatedData['job_nature'], // Use job type ID
+            'user_id' => Auth::user()->id,  // Associate job with the logged-in user
+            'vacancy' => $validatedData['vacancy'],
+            'salary' => $validatedData['salary'] ?? null, // Optional
+            'location' => $validatedData['location'],
+            'description' => $validatedData['description'],
+            'benefits' => $validatedData['benefits'] ?? null, // Optional
+            'responsibility' => $validatedData['responsibility'] ?? null, // Optional
+            'qualification' => $validatedData['qualification'] ?? null, // Optional
+            'keywords' => $validatedData['keywords'],
+            'experience' => $validatedData['experience'],
+            'company_name' => $validatedData['company_name'],
+            'company_location' => $validatedData['company_location'] ?? null,  // Optional
+            'company_website' => $validatedData['company_website'] ?? null,  // Optional
+            'created_at' => now(),  // Store timestamp for when the job was created
+            'updated_at' => now()   // Store timestamp for when the job was updated
+        ]);
 
-            ->update([
-                'title' => $validatedData['title'],
-                'category_id' => $validatedData['category'], // Use category ID
-                'job_type_id' => $validatedData['job_nature'], // Use job type ID
-                'user_id' => Auth::user()->id,
-                'vacancy' => $validatedData['vacancy'],
-                'salary' => $validatedData['salary'] ?? null, // Optional
-                'location' => $validatedData['location'],
-                'description' => $validatedData['description'],
-                'benefits' => $validatedData['benefits'] ?? null, // Optional
-                'responsibility' => $validatedData['responsibility'] ?? null, // Optional
-                'qualification' => $validatedData['qualification'] ?? null, // Optional
-                'keywords' => $validatedData['keywords'],
-                'experience' => $validatedData['experience'],
-                'company_name' => $validatedData['company_name'],
-                'company_location' => $validatedData['company_location'] ?? null,  // Optional
-                'company_website' => $validatedData['company_website'] ?? null,  // Optional
-                'updated_at' => now()  // Ensure the timestamp is updated
-            ]);
-
-        // Redirect or return a response after successfully saving
-        return redirect()->route('my-job')->with('success', 'Job updated successfully!');
+        // Redirect after successfully adding the job
+        return redirect()->route('my-job')->with('success', 'Job posted successfully!');
     }
 }
