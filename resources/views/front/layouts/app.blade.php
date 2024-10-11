@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
         integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM6bW1Ht3y9Y7KpUbsj2/zUr3pcf12u3L0/Qe" crossorigin="anonymous">
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
+        integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 </head>
 
 <body data-instant-intensity="mousedown">
@@ -92,7 +97,13 @@
     <script src="{{ url('assets/js/slick.min.js') }}"></script>
     <script src="{{ url('assets/js/lightbox.min.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/trumbowyg.min.js"
+        integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <script>
+        $('.textarea').trumbowyg();
+    </script>
 
     @yield('customJs')
 </body>
