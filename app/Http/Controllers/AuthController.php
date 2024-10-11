@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 
@@ -82,6 +83,42 @@ class AuthController extends Controller
         return view('auth.profile', [
             'user' => $user
         ]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'old_password' => 'required',
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/[a-z]/',
+                'regex:/[A-Z]/',
+                'different:old_password',  // New password must be different from old password
+            ],
+            'confirm_password' => 'required|same:new_password',
+        ]);
+
+
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+
+        // Check if the old password matches the user's current password
+        if (!Hash::check($request->old_password, Auth::user()->password)) {
+            return redirect()->back()->withErrors(['old_password' => 'Old password is incorrect']);
+        }
+
+        // Update the password
+        Auth::user()->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        // Redirect with success message
+        return redirect()->back()->with('success', 'Password updated successfully');
     }
 
     public function updateProfile(Request $request)
@@ -189,8 +226,6 @@ class AuthController extends Controller
 
     //     return response()->json(['success' => 'Job created successfully!']);
     // }
-
-
 
 
     public function myJobs()
