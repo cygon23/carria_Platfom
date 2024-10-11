@@ -93,6 +93,7 @@
     <script src="{{ url('assets/js/lightbox.min.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
 
+
     @yield('customJs')
 </body>
 
