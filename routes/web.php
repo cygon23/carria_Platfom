@@ -37,5 +37,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/delete-Savedjob/{jobId}', [AuthController::class, 'removeSavedJob'])->name('delete-Savedjob');
     Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
     Route::get('/saved-job-account', [AuthController::class, 'savedJobAccount'])->name('saved-job-account');
+    Route::post('/password-update', [AuthController::class, 'updatePassword'])->name('password-update');
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
