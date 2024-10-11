@@ -25,7 +25,7 @@
                         <div class="card-body card-form p-4">
                             <h3 class="fs-4 mb-1">Job Details</h3>
                             @include('front.layouts._message')
-                            <form method="POST" action="{{ route('save-job') }}">
+                            <form method="POST" action="{{ route('add-jobs') }}">
                                 @csrf
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
@@ -199,4 +199,8 @@
             </div>
 
     </section>
+@endsection
+
+
+@section('customJs')
 @endsection
