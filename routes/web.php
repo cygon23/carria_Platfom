@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\JobController;
@@ -12,6 +13,8 @@ Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/job
 Route::get('/account/jobs/detail/{id}', [JobController::class, 'jobDetail'])->name('/account/jobs/detail');
 Route::post('/apply-job', [JobController::class, 'applyJob'])->name('apply-job');
 
+
+Route::get('/dashboard', [DashboardController::class, 'index'])->middleware('admin');
 
 Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register']);
