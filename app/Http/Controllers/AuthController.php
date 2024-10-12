@@ -66,7 +66,8 @@ class AuthController extends Controller
         }
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return redirect()->route('profile')->with('success', 'Welcome back!');
+
+            return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
         } else {
             return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
         }
