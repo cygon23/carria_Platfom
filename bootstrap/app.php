@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Foundation\Application;
@@ -16,6 +17,10 @@ return Application::configure(basePath: dirname(__DIR__))
         // Guest Middleware Group
         $middleware->appendToGroup('guest', [
             RedirectIfAuthenticated::class,
+        ]);
+
+        $middleware->alias([
+            'admin' => AdminMiddleware::class,
         ]);
 
         // Auth Middleware Group
