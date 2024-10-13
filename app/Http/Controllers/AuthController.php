@@ -156,7 +156,7 @@ class AuthController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg|max:2048', // 2MB Max
         ]);
 
-        $user = Auth::user()->id;
+        $user = Auth::user();
 
         if ($request->hasFile('image')) {
             // Delete old image if exists and it's not the default
@@ -188,45 +188,6 @@ class AuthController extends Controller
             'job_types' =>  $job_types,
         ]);
     }
-
-
-    // public function addJobs(Request $request)
-
-    // {
-
-
-    //     $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'category' => 'required|integer',
-    //         'job_nature' => 'required|integer',
-    //         'vacancy' => 'required|integer',
-    //         'location' => 'required|string|max:255',
-    //         'description' => 'required|string',
-    //         'experience' => 'required|integer',
-    //         'keywords' => 'required|string',
-    //         'company_name' => 'required|string|max:255',
-    //     ]);
-
-    //     Job::create([
-    //         'title' => $request->title,
-    //         'category_id' => $request->category,
-    //         'job_type_id' => $request->job_nature,
-    //         'vacancy' => $request->vacancy,
-    //         'salary' => $request->salary,
-    //         'location' => $request->location,
-    //         'description' => $request->description,
-    //         'benefits' => $request->benefits,
-    //         'responsibility' => $request->responsibility,
-    //         'qualification' => $request->qualification,
-    //         'experience' => $request->experience,
-    //         'keywords' => $request->keywords,
-    //         'company_name' => $request->company_name,
-    //         'company_location' => $request->company_location,
-    //         'company_website' => $request->website,
-    //     ]);
-
-    //     return response()->json(['success' => 'Job created successfully!']);
-    // }
 
 
     public function myJobs()
