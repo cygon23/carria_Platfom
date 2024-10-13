@@ -53,7 +53,7 @@
                         <a class="btn btn-outline-primary me-2" href="{{ route('login') }}">Login</a>
                     @else
                         @if (Auth::user()->role === 'admin')
-                            <a class="btn btn-outline-primary me-2" href="{{ url('/dashboard') }}">Dashboard</a>
+                            <a class="btn btn-outline-primary me-2" href="{{ route('dashboard') }}">Dashboard</a>
                         @endif
                         <a class="btn btn-outline-primary me-2" href="{{ route('profile') }}">Account</a>
                     @endif
