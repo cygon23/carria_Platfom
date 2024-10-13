@@ -7,8 +7,8 @@
                 <div class="col">
                     <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Admin Dashboard</li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item active">List /Jobs</li>
                         </ol>
                     </nav>
                 </div>
@@ -69,7 +69,8 @@
                                                                     <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                                                                 </button>
                                                                 <ul class="dropdown-menu dropdown-menu-end">
-                                                                    <li><a class="dropdown-item" href=""><i
+                                                                    <li><a class="dropdown-item"
+                                                                            href="{{ route('dashboard.Jobedit', $job->id) }}"><i
                                                                                 class="fa fa-edit" aria-hidden="true"></i>
                                                                             Edit</a></li>
 
