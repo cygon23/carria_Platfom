@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\admin\DashboardController;
+use App\Http\Controllers\admin\JobAdminController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\homeController;
@@ -21,6 +22,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/dashboard/edit/{id}', [UserController::class, 'editUser'])->name('dashboard.edit');
     Route::post('/dashboard/update/{id}', [UserController::class, 'updateUser'])->name('dashboard.update');
     Route::post('/dashboard/delete/{id}', [UserController::class, 'deleteUser'])->name('dashboard.delete');
+    Route::get('/dashboard/jobs', [JobAdminController::class, 'index'])->name('dashboard.index');
 });
 
 Route::middleware('guest')->group(function () {
