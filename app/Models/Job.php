@@ -16,6 +16,7 @@ class Job extends Model
         'title',
         'category_id',
         'job_type_id',
+        'user_id',
         'vacancy',
         'salary',
         'location',
@@ -28,6 +29,7 @@ class Job extends Model
         'company_name',
         'company_location',
         'website',
+
     ];
 
     public function JobType()
@@ -43,5 +45,11 @@ class Job extends Model
     public function applications()
     {
         return $this->hasMany(JobApplication::class);
+    }
+
+
+    public function user()
+    {
+        return $this->hasMany(User::class);
     }
 }
