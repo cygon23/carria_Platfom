@@ -72,8 +72,9 @@
                                                                             Edit</a></li>
 
                                                                     <li>
-                                                                        <form action="#" method="POST"
-                                                                            style="display: inline;">
+                                                                        <form
+                                                                            action="{{ route('dashboard.delete', $user->id) }}"
+                                                                            method="POST" style="display: inline;">
                                                                             @csrf
                                                                             @method('POST')
                                                                             <button type="submit" class="dropdown-item"
