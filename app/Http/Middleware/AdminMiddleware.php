@@ -20,6 +20,7 @@ class AdminMiddleware
     {
         // Check if the user is authenticated and has the 'admin' role
         if (Auth::check() && Auth::user()->role === 'admin') {
+
             return $next($request);
         } else {
             abort(404);
