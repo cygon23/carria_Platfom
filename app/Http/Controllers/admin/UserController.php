@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -13,7 +14,9 @@ class UserController extends Controller
 {
     public  function users()
     {
-        $users = User::orderBy('created_at', 'DESC')->paginate(5);
+        $users = User::orderBy('created_at', 'DESC')
+            ->where('is_delete', 0)
+            ->paginate(5);
         return view('admin.users.list', [
             'users' => $users
         ]);
@@ -57,5 +60,24 @@ class UserController extends Controller
         $user->save();
 
         return redirect()->back()->with('success', 'Profile updated successfully');
+    }
+
+    public function deleteUser(Request $request)
+    {
+        // Find the user by ID from the request
+        $user = DB::table('users')
+            ->where('id', $request->id)
+            ->first();
+
+        if (!$user) {
+            return redirect()->back()->with('error', 'User not found or already deleted');
+        }
+
+        // Mark the user as deleted (set is_delete to 1)
+        DB::table('users')
+            ->where('id', $request->id)
+            ->update(['is_delete' => 1]);
+
+        return redirect(route('dashboard.users'))->with('success', 'User deleted successfully');
     }
 }
