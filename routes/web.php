@@ -20,6 +20,7 @@ Route::middleware('admin')->group(function () {
     Route::get('/dashboard/users', [UserController::class, 'users'])->name('dashboard.users');
     Route::get('/dashboard/edit/{id}', [UserController::class, 'editUser'])->name('dashboard.edit');
     Route::post('/dashboard/update/{id}', [UserController::class, 'updateUser'])->name('dashboard.update');
+    Route::post('/dashboard/delete/{id}', [UserController::class, 'deleteUser'])->name('dashboard.delete');
 });
 
 Route::middleware('guest')->group(function () {
