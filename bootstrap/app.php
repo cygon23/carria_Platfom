@@ -19,8 +19,8 @@ return Application::configure(basePath: dirname(__DIR__))
             RedirectIfAuthenticated::class,
         ]);
 
-        $middleware->alias([
-            'admin' => AdminMiddleware::class,
+        $middleware->appendToGroup('admin', [
+            AdminMiddleware::class,
         ]);
 
         // Auth Middleware Group
