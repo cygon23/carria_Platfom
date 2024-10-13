@@ -21,7 +21,7 @@
                 <a href="{{ route('dashboard.users') }}">Users List</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="#">Jobs</a>
+                <a href="{{ route('dashboard.index') }}">Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="#">Jobs Application</a>
