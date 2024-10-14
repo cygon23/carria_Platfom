@@ -35,6 +35,14 @@
                 <a href="{{ route('saved-job-account') }}">Saved Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="#">Resume Builder</a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="#">
+                    <i class="fas fa-lock"></i> Trainings
+                </a>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('logout') }}">logout</a>
             </li>
         </ul>
