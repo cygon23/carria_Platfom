@@ -15,7 +15,10 @@ Route::get('/', [homeController::class, 'index']);
 Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/jobs');
 Route::get('/account/jobs/detail/{id}', [JobController::class, 'jobDetail'])->name('/account/jobs/detail');
 Route::post('/apply-job', [JobController::class, 'applyJob'])->name('apply-job');
-
+Route::get('/password-forgot', [AuthController::class, 'forgotPassword'])->name('password-forgot');
+Route::post('/password-forgot', [AuthController::class, 'processForgotPassword'])->name('password-forgot.email');
+Route::get('/password-forgot/{token}', [AuthController::class, 'emailResetPassword'])->name('password-reset.email');
+Route::post('/password-forgot/email-request', [AuthController::class, 'processEmailResetPassword'])->name('password-reset.email.reqest');
 
 Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -59,5 +62,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
     Route::get('/saved-job-account', [AuthController::class, 'savedJobAccount'])->name('saved-job-account');
     Route::post('/password-update', [AuthController::class, 'updatePassword'])->name('password-update');
+
+
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
