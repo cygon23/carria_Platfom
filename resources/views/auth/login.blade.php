@@ -31,12 +31,12 @@
                             </div>
                             <div class="justify-content-between d-flex">
                                 <button class="btn btn-primary mt-2">Login</button>
-                                <a href="{{ url('forgot-password') }}" class="mt-3">Forgot Password?</a>
+                                <a href="{{ url('password-forgot') }}" class="mt-3">Forgot Password?</a>
                             </div>
                         </form>
                     </div>
                     <div class="mt-4 text-center">
-                        <p>Do not have an account? <a href="{{ url('register') }}">Register</a></p>
+                        <p>Dont have an account? <a href="{{ url('register') }}">Register</a></p>
                     </div>
                 </div>
             </div>
