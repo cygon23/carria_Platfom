@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\admin\DashboardController;
 use App\Http\Controllers\admin\JobAdminController;
+use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\homeController;
@@ -26,6 +27,8 @@ Route::middleware('admin')->group(function () {
     Route::get('/dashboard/edit/admin/{id}', [JobAdminController::class, 'editJob'])->name('dashboard.Jobedit');
     Route::post('/dashboard/update/admin/{id}', [JobAdminController::class, 'adminUpdateJob'])->name('dashboard.updateJob');
     Route::post('/dashboard/admin/delete/{id}', [JobAdminController::class, 'admindeleteJob'])->name('dashboard.deleteJob');
+
+    Route::get('/dashboard/jobs/application', [JobApplicationController::class, 'index'])->name('dashboard.application.index');
 });
 
 Route::middleware('guest')->group(function () {
