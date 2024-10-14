@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ResetPasswordEmail;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -12,9 +13,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 
 class AuthController extends Controller
@@ -301,6 +304,118 @@ class AuthController extends Controller
 
         return redirect(route('my-job'))->with('success', 'Job deleted successfully');
     }
+
+
+    public function forgotPassword()
+    {
+        return view('auth.forgot-pass');
+    }
+
+    public function processForgotPassword(Request $request)
+    {
+        $rules = [
+            'email' => [
+                'required',
+                'email',
+                'exists:users,email',
+                // 'regex:/^[A-Za-z0-9._%+-]+@(gmail\.com|yahoo\.com|protonmail\.com|example\.com|yourcompany\.com)$/|unique:users,email'
+            ],
+        ];
+
+        // Validate the request with custom error messages
+        $validatedData = $request->validate($rules, [
+            'email.regex' => 'Please use a Gmail, Yahoo, or ProtonMail email address.',
+            'email.exists' => 'The email does not exist in our system.',
+        ]);
+
+        $token = Str::random(40);
+        //delete if exit
+        DB::table('password_reset_tokens')->where('email', $request->email)->delete();
+
+        DB::table('password_reset_tokens')->insert([
+            'email' => $request->email,
+            'token' => $token,
+            'created_at' => now()
+        ]);
+
+        //sending email
+        $user = User::where('email', $request->email)->first();
+        $mailData = [
+            'token' => $token,
+            'user' => $user,
+            'subject' => 'Reset password Link'
+        ];
+
+        Mail::to($request->email)->send(new ResetPasswordEmail($mailData));
+
+        return redirect()->route('login')->with('success', 'Please check you inbox to reset passowrd');
+    }
+
+    //sending link
+
+    public function emailResetPassword($tokenString)
+    {
+        //delete if exit
+        $token =  DB::table('password_reset_tokens')->where('token', $tokenString)->first();
+        if ($token == null) {
+            return redirect()->route('password-forgot')->with('error', 'Invalid request Please try again');
+        }
+
+        return view('auth.reset-password', [
+            'tokenString' => $tokenString
+        ]);
+    }
+
+    //updating the password
+    public function processEmailResetPassword(Request $request)
+    {
+        // Check if the token is valid
+        $token = DB::table('password_reset_tokens')->where('token', $request->token)->first();
+        if ($token == null) {
+            return redirect()->route('password-forgot')->with('error', 'Invalid request. Please try again.');
+        }
+
+        // Define validation rules
+        $rules = [
+            'new_password' => [
+                'required',
+                'string',
+                'min:8',
+                'max:20',
+                'regex:/[a-z]/', // At least one lowercase letter
+                'regex:/[A-Z]/', // At least one uppercase letter
+                'regex:/[0-9]/', // At least one digit
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // At least one special character
+                // Ensure 'old_password' is defined in the context if it's referenced here
+                //'different:old_password', // Must not be the same as old password
+            ],
+            'confirm_password' => [
+                'required',
+                'string',
+                'same:new_password', // Must match the new password
+            ],
+        ];
+
+        // Validate the request with custom error messages
+        $validatedData = $request->validate($rules, [
+            'new_password.required' => 'The new password is required.',
+            'new_password.min' => 'The new password must be at least 8 characters.',
+            'new_password.max' => 'The new password must not exceed 20 characters.',
+            'new_password.regex' => 'The new password must contain at least one uppercase letter, one lowercase letter, one digit, and one special character.',
+            //'new_password.different' => 'The new password must not be the same as the old password.',
+            'confirm_password.required' => 'The confirmation password is required.',
+            'confirm_password.same' => 'The  password must match .',
+        ]);
+
+
+        User::where('email', $token->email)->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->route('login')->with('success', 'Your password has been reset successfully.');
+    }
+
+
 
     public function logout()
     {
