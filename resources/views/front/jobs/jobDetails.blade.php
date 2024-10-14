@@ -53,8 +53,33 @@
                                 <h4>Job description</h4>
                                 {!! nl2br($job->description) !!}
                             </div>
-                            <!-- Responsibilities, Qualifications, Benefits sections go here -->
-                            <!-- ... -->
+
+                            <div class="single_wrap">
+                                <h4>Qualifications</h4>
+                                {!! nl2br($job->qualification) !!}
+                            </div>
+
+                            <div class="single_wrap">
+                                <h4>Responsibility</h4>
+                                {!! nl2br($job->responsibility) !!}
+                            </div>
+
+
+                            <div class="single_wrap">
+                                <h4>Experience</h4>
+                                {!! nl2br($job->experience) !!}
+                            </div>
+
+                            <div class="single_wrap">
+                                <h4>Benefits</h4>
+                                {!! nl2br($job->benefits) !!}
+                            </div>
+
+                            <div class="single_wrap">
+                                <h4>keywords</h4>
+                                {!! nl2br($job->keywords) !!}
+                            </div>
+
                             <div class="border-bottom"></div>
                             <div class="pt-3 text-end">
                                 @if (Auth::check())
