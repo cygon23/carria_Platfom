@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 
 class AuthController extends Controller
@@ -361,6 +362,11 @@ class AuthController extends Controller
             return redirect()->route('password-forgot')->with('error', 'Invalid request Please try again');
         }
 
+        // Check if the token has expired (5 minutes from the time it was created)
+        if (Carbon::parse($token->created_at)->addMinutes(5)->isPast()) {
+            return redirect()->route('password-forgot')->with('error', 'The reset token has expired.');
+        }
+
         return view('auth.reset-password', [
             'tokenString' => $tokenString
         ]);
@@ -375,6 +381,11 @@ class AuthController extends Controller
             return redirect()->route('password-forgot')->with('error', 'Invalid request. Please try again.');
         }
 
+
+        // Check if the token has expired (5 minutes from the time it was created)
+        if (Carbon::parse($token->created_at)->addMinutes(5)->isPast()) {
+            return redirect()->route('password-forgot')->with('error', 'The reset token has expired.');
+        }
         // Define validation rules
         $rules = [
             'new_password' => [
@@ -411,6 +422,8 @@ class AuthController extends Controller
         User::where('email', $token->email)->update([
             'password' => Hash::make($request->new_password)
         ]);
+
+        DB::table('password_reset_tokens')->where('token', $request->token)->delete();
 
         return redirect()->route('login')->with('success', 'Your password has been reset successfully.');
     }
