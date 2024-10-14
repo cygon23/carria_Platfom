@@ -8,7 +8,7 @@
                     <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
                         <ol class="breadcrumb mb-0">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
-                            <li class="breadcrumb-item active">List /Jobs</li>
+                            <li class="breadcrumb-item active">List</li>
                         </ol>
                     </nav>
                 </div>
@@ -43,6 +43,7 @@
                                             <tr>
                                                 <th scope="col">Title</th>
                                                 <th scope="col">Created By</th>
+                                                <th scope="col">status</th>
                                                 <th scope="col">Date</th>
                                                 <th scope="col">Action</th>
                                             </tr>
@@ -60,6 +61,13 @@
                                                             @endif
                                                         </td>
                                                         <td>{{ $job->user_name }}</td>
+                                                        <td>
+                                                            @if ($job->status == 1)
+                                                                <p class="text-success">Active</p>
+                                                            @else
+                                                                <p class="text-danger">Blocked</p>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ \Carbon\Carbon::parse($job->created_at)->format('d M,Y ') }}
                                                         </td>
                                                         <td>
@@ -75,10 +83,10 @@
                                                                             Edit</a></li>
 
                                                                     <li>
-                                                                        <form action="" method="POST"
-                                                                            style="display: inline;">
+                                                                        <form
+                                                                            action="{{ route('dashboard.deleteJob', $job->id) }}"
+                                                                            method="POST" style="display: inline;">
                                                                             @csrf
-
                                                                             <button type="submit" class="dropdown-item"
                                                                                 style="border: none; background: none; cursor: pointer;">
                                                                                 <i class="fa fa-edit"
@@ -86,6 +94,7 @@
                                                                                 Delete
                                                                             </button>
                                                                         </form>
+
                                                                     </li>
                                                                 </ul>
                                                             </div>
