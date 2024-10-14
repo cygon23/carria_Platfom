@@ -23,8 +23,8 @@ Route::middleware('admin')->group(function () {
     Route::post('/dashboard/update/{id}', [UserController::class, 'updateUser'])->name('dashboard.update');
     Route::post('/dashboard/delete/{id}', [UserController::class, 'deleteUser'])->name('dashboard.delete');
     Route::get('/dashboard/jobs', [JobAdminController::class, 'index'])->name('dashboard.index');
-    Route::get('/dashboard/edit/{id}', [JobAdminController::class, 'editJob'])->name('dashboard.Jobedit');
-    Route::post('/dashboard/update/{id}', [JobAdminController::class, 'adminUpdateJob'])->name('dashboard.updateJob');
+    Route::get('/dashboard/edit/admin/{id}', [JobAdminController::class, 'editJob'])->name('dashboard.Jobedit');
+    Route::post('/dashboard/update/admin/{id}', [JobAdminController::class, 'adminUpdateJob'])->name('dashboard.updateJob');
 });
 
 Route::middleware('guest')->group(function () {

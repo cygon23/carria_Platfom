@@ -7,8 +7,10 @@
                 <div class="col">
                     <nav aria-label="breadcrumb" class="rounded-3 p-3 mb-4">
                         <ol class="breadcrumb mb-0">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item active">Account Settings</li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard.users') }}">List</a></li>
+
+                            <li class="breadcrumb-item active">User</li>
                         </ol>
                     </nav>
                 </div>
@@ -24,7 +26,7 @@
                         <form action="{{ route('dashboard.update', $user->id) }}" method="POST">
                             @csrf <!-- CSRF protection -->
                             <div class="card-body p-4">
-                                <h3 class="fs-4 mb-1">User / Edit</h3>
+                                <h3 class="fs-4 mb-1">Edit</h3>
                                 <div class="mb-4">
                                     <label for="name" class="mb-2">Name*</label>
                                     <input type="text" name="name" placeholder="Enter Name" class="form-control"
