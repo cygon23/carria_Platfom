@@ -29,6 +29,7 @@ class JobAdminController extends Controller
                 'users.email as user_email',
                 'applicant_counts.applicant_count'
             )
+            ->where('jobs_.is_delete', 0)
             ->orderBy('jobs_.created_at', 'DESC')
             ->paginate(5);
 
@@ -98,9 +99,25 @@ class JobAdminController extends Controller
         $job->company_name = $validatedData['company_name'];
         $job->company_location = $validatedData['company_location'] ?? null;  // Optional field
         $job->company_website = $validatedData['company_website'] ?? null;  // Optional field
+        $job->status = $request->status;
+        $job->isFeatured = (!empty($request->isFeatured)) ? $request->isFeatured : 0;
         $job->save();
 
         // Redirect or return a response after successfully saving
         return redirect()->route('dashboard.index')->with('success', 'Job updated successfully!');
+    }
+
+    public function admindeleteJob(Request $request)
+    {
+        $id = $request->id;
+        $job = Job::find($id);
+
+        if ($job == null) {
+            abort(404);
+        }
+        $job->is_delete = 1;
+        $job->save();
+
+        return redirect()->back()->with('success', 'Job marked as deleted.');
     }
 }
