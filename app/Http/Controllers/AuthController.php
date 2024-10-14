@@ -386,7 +386,7 @@ class AuthController extends Controller
         if (Carbon::parse($token->created_at)->addMinutes(5)->isPast()) {
             return redirect()->route('password-forgot')->with('error', 'The reset token has expired.');
         }
-        // Define validation rules
+
         $rules = [
             'new_password' => [
                 'required',
