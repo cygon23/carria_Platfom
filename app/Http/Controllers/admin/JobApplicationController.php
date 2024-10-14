@@ -46,12 +46,28 @@ class JobApplicationController extends Controller
                 'job_applications.applied_date',
 
             )
-            ->orderBy('job_applications.created_at', 'DESC') // Order by application date
-            ->paginate(5);  // Paginate the results (5 per page)
+            ->orderBy('job_applications.created_at', 'DESC')
+            ->where('job_applications.is_delete', 0)
+            ->paginate(5);
 
 
         return view('admin.job_application.list', [
             'applications' => $applications
         ]);
+    }
+
+    public function admindeleteJobApplication(Request $request)
+    {
+        $id = $request->id;
+        $application = JobApplication::find($id);
+
+        if ($application == null) {
+            return redirect()->back()->with('error', 'Job application deleted or not found');
+        }
+
+        $application->is_delete = 1;
+        $application->save();
+
+        return redirect()->back()->with('success', 'Job application marked as deleted.');
     }
 }
