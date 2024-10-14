@@ -39,7 +39,7 @@ class JobNotificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'front.mail.jobNotificatioEmail',
+            view: 'mail.jobNotificatioEmail',
         );
     }
 
