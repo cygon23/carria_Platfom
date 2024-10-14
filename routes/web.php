@@ -19,16 +19,19 @@ Route::post('/apply-job', [JobController::class, 'applyJob'])->name('apply-job')
 
 Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
     Route::get('/dashboard/users', [UserController::class, 'users'])->name('dashboard.users');
     Route::get('/dashboard/edit/{id}', [UserController::class, 'editUser'])->name('dashboard.edit');
     Route::post('/dashboard/update/{id}', [UserController::class, 'updateUser'])->name('dashboard.update');
     Route::post('/dashboard/delete/{id}', [UserController::class, 'deleteUser'])->name('dashboard.delete');
+
     Route::get('/dashboard/jobs', [JobAdminController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/edit/admin/{id}', [JobAdminController::class, 'editJob'])->name('dashboard.Jobedit');
     Route::post('/dashboard/update/admin/{id}', [JobAdminController::class, 'adminUpdateJob'])->name('dashboard.updateJob');
     Route::post('/dashboard/admin/delete/{id}', [JobAdminController::class, 'admindeleteJob'])->name('dashboard.deleteJob');
 
     Route::get('/dashboard/jobs/application', [JobApplicationController::class, 'index'])->name('dashboard.application.index');
+    Route::post('/dashboard/admin/application/delete/{id}', [JobApplicationController::class, 'admindeleteJobApplication'])->name('dashboard.deleteJob.application');
 });
 
 Route::middleware('guest')->group(function () {
