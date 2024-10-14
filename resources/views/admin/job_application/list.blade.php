@@ -79,8 +79,9 @@
                                                                             Edit</a></li> --}}
 
                                                                     <li>
-                                                                        <form action="#" method="POST"
-                                                                            style="display: inline;">
+                                                                        <form
+                                                                            action="{{ route('dashboard.deleteJob.application', $application->id) }}"
+                                                                            method="POST" style="display: inline;">
                                                                             @csrf
                                                                             <button type="submit" class="dropdown-item"
                                                                                 style="border: none; background: none; cursor: pointer;">
