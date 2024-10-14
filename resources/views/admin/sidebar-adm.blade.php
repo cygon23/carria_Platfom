@@ -24,7 +24,7 @@
                 <a href="{{ route('dashboard.index') }}">Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="#">Jobs Application</a>
+                <a href="{{ route('dashboard.application.index') }}">Jobs Application</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('logout') }}">logout</a>
