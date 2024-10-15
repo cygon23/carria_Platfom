@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPasswordEmail;
+use App\Mail\VeryfyEmail;
 use App\Models\Category;
 use App\Models\Job;
 use App\Models\JobApplication;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+
 
 
 class AuthController extends Controller
@@ -47,19 +49,38 @@ class AuthController extends Controller
         $save->email = trim($request->email);
         // $save->password = Hash::make(trim($request->password));
         $save->password = Hash::make(trim($request->password));
+        $save->remember_token = Str::random(40);
         $save->save();
 
-        return redirect('login')->with('success', 'your succefully createated an account');
+        Mail::to($save->email)->send(new VeryfyEmail($save));
+        return redirect('login')->with('success', 'check to you inbox to very email address');
     }
 
+
+    public function verify($token)
+    {
+        $user = User::where('remember_token', '=', $token)->first();
+
+        if (!empty($user)) {
+
+
+            $user->email_verified_at = Carbon::now();
+            $user->remember_token = Str::random(40);
+            $user->save();
+
+            return redirect('login')->with('success', 'Your Email Successfully Verified');
+        } else {
+            abort(404);
+        }
+    }
     public function login()
     {
         return view('auth.login');
     }
 
-
     public function authenticate(Request $request)
     {
+
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:8|max:20',
@@ -71,11 +92,29 @@ class AuthController extends Controller
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
 
-            return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
+
+            if (!empty(Auth::user()->email_verified_at)) {
+                // Redirect to profile if email is verified
+                return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
+            } else {
+                // User is logged in but has not verified their email
+                $user = Auth::user(); // Get the authenticated user
+                Auth::logout(); // Log the user out
+
+                // Generate a new verification token
+                $user->remember_token = Str::random(40);
+                $user->save();
+
+                // Send the verification email
+                Mail::to($user->email)->send(new VeryfyEmail($user));
+
+                return redirect()->back()->with('success', 'Please Check to your email box to verify the email.');
+            }
         } else {
             return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
         }
     }
+
 
 
     public function profile()

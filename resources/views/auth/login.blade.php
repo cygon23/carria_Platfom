@@ -29,6 +29,13 @@
                                     <!-- Use $message for error messages -->
                                 @enderror
                             </div>
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="remember" value="true"
+                                        id="rememberMe">
+                                    <label class="form-check-label" for="rememberMe">Remember me</label>
+                                </div>
+                            </div>
                             <div class="justify-content-between d-flex">
                                 <button class="btn btn-primary mt-2">Login</button>
                                 <a href="{{ url('password-forgot') }}" class="mt-3">Forgot Password?</a>

@@ -42,6 +42,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [AuthController::class, 'processRegistration']);
     Route::get('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('login.authenticate');
+    Route::get('verify/{token}', [AuthController::class, 'verify']);
+
+    //email verification
+    Route::get('/email/verify', [AuthController::class, 'verifyemail'])->name('verification.notice');
 });
 
 Route::middleware('auth')->group(function () {
