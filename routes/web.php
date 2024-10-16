@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\JobAdminController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CVController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\TestController;
@@ -66,6 +67,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/save-job', [JobController::class, 'saveJob'])->name('save-job');
     Route::get('/saved-job-account', [AuthController::class, 'savedJobAccount'])->name('saved-job-account');
     Route::post('/password-update', [AuthController::class, 'updatePassword'])->name('password-update');
+    //cv url
+    Route::get('accounts/cv', [CVController::class, 'index'])->name('account.cv');
+    Route::post('/upload-cv', [CVController::class, 'upload'])->name('cv.upload');
+    Route::get('/download-cv', [CVController::class, 'download'])->name('cv.download');
+    Route::get('/cv/preview', [CvController::class, 'preview'])->name('cv.preview');
 
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
