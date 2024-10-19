@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-
+use Flasher\Prime\FlasherInterface;
 
 
 class AuthController extends Controller
@@ -67,8 +67,8 @@ class AuthController extends Controller
             $user->email_verified_at = Carbon::now();
             $user->remember_token = Str::random(40);
             $user->save();
-
-            return redirect('login')->with('success', 'Your Email Successfully Verified');
+            flash()->success('Your Email Successfully Verified.');
+            return redirect('login');
         } else {
             abort(404);
         }
@@ -107,8 +107,9 @@ class AuthController extends Controller
 
                 // Send the verification email
                 Mail::to($user->email)->send(new VeryfyEmail($user));
+                flash()->success('Please Check to your email box to verify the email.');
 
-                return redirect()->back()->with('success', 'Please Check to your email box to verify the email.');
+                return redirect()->back();
             }
         } else {
             return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
