@@ -78,4 +78,16 @@ class homeController extends Controller
     //         'newCategories' => $newCategories
     //     ]);
     // }
+
+
+
+    public function featuredCompanies()
+    {
+        return view('front.company');
+    }
+
+    public function exploreSection()
+    {
+        return view('front.explore');
+    }
 }
