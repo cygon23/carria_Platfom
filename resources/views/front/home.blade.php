@@ -9,7 +9,8 @@
                 <div class="col-12 col-xl-8">
                     <h1>Find your dream job</h1>
                     <p>Thounsands of jobs available.</p>
-                    <div class="banner-btn mt-5"><a href="#" class="btn btn-primary mb-4 mb-sm-0">Explore Now</a>
+                    <div class="banner-btn mt-5"><a href="{{ route('explore') }}" class="btn btn-primary mb-4 mb-sm-0">Our
+                            Diffence</a>
                     </div>
                 </div>
             </div>
