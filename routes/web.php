@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Route;
 
 //public url
 Route::get('/', [homeController::class, 'index']);
+Route::get('/companies', [homeController::class, 'featuredCompanies'])->name('companies');
+Route::get('/explore', [homeController::class, 'exploreSection'])->name('explore');
+
 Route::get('/account/jobs', [JobController::class, 'index'])->name('/account/jobs');
 Route::get('/account/jobs/detail/{id}', [JobController::class, 'jobDetail'])->name('/account/jobs/detail');
 Route::post('/apply-job', [JobController::class, 'applyJob'])->name('apply-job');
