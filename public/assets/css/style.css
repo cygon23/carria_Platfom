@@ -10020,3 +10020,52 @@ footer .nav-link {
   content: '';
 }
 /* '' */
+
+/* Custom LinkedIn Button */
+.btn-linkedin {
+    background-color: #0077B5;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    text-align: center;
+}
+
+.btn-linkedin i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Custom Google Button */
+.btn-google {
+    background-color: #DB4437;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 160px;
+    text-align: center;
+}
+
+.btn-google i {
+    margin-right: 8px;
+    font-size: 18px;
+}
+
+/* Add hover effect */
+.btn-linkedin:hover {
+    background-color: #005983;
+    text-decoration: none;
+}
+
+.btn-google:hover {
+    background-color: #C23321;
+    text-decoration: none;
+}
