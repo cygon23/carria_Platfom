@@ -44,7 +44,7 @@
 
     <style>
         .section-5 {
-            background-image: url('assets/images/banner-1.jpg');
+            /* background-image: url('assets/images/banner-1.jpg'); */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -76,6 +76,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('/account/jobs') }}">Find Jobs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="{{ route('companies') }}">Companies</a>
                         </li>
                     </ul>
                     @if (!Auth::check())
