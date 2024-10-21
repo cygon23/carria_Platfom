@@ -42,7 +42,17 @@
     <!-- Template Main CSS File -->
     <link href="{{ url('test/assets/css/style.css') }}" rel="stylesheet">
 
+    <style>
+        .section-5 {
+            background-image: url('assets/images/banner-1.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Optionally add padding or adjust height if needed */
+            padding: 50px 0;
 
+        }
+    </style>
 
 </head>
 
