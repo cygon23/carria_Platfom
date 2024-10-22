@@ -9,7 +9,13 @@ use App\Http\Controllers\CVController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\TestController;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 
 //public url
 Route::get('/', [homeController::class, 'index']);
@@ -78,4 +84,27 @@ Route::middleware('auth')->group(function () {
 
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+});
+
+
+Route::get('/auth/google/redirect', function (Request $request) {
+    return Socialite::driver("google")->redirect();
+});
+
+
+Route::get('/auth/google/callback', function (Request $request) {
+    $googleUser = Socialite::driver("google")->user();
+
+    $user = User::updateOrCreate(
+        ['google_id' => $googleUser->id],
+        [
+            'name' => $googleUser->name,
+            'email' => $googleUser->email,
+            'password' => Hash::make(Str::random(12)),
+            'email_verified_at' => now()
+        ]
+    );
+
+    Auth::login($user);
+    return redirect('/profile');
 });
