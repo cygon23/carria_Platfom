@@ -115,7 +115,7 @@
                                     <i class="fab fa-linkedin"></i> LinkedIn
                                 </a>
                                 <!-- Google Register Button -->
-                                <a href="#" class="btn btn-google mx-2">
+                                <a href="{{ url('/auth/google/redirect') }}" class="btn btn-google mx-2">
                                     <i class="fab fa-google"></i> Google
                                 </a>
                             </div>
