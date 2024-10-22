@@ -23,6 +23,8 @@ class User extends Authenticatable
         'image',
         'designation',
         'mobile',
+        'google_id',
+        'email_verified_at'
     ];
 
 
