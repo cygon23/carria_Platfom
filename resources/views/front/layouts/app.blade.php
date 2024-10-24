@@ -140,7 +140,6 @@
         integrity="sha512-YJgZG+6o3xSc0k5wv774GS+W1gx0vuSI/kr0E0UylL/Qg/noNspPtYwHPN9q6n59CTR/uhgXfjDXLTRI+uIryg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-
     <!----for try folder-->
 
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
