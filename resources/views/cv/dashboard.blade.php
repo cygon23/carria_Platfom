@@ -77,7 +77,7 @@
                             <h5 class="card-title">Create a New CV</h5>
                             <p class="card-text">Don’t have a CV? Use our CV builder to create a professional CV that stands
                                 out.</p>
-                            <a href="/create-cv" class="btn btn-success">Create CV</a>
+                            <a href="{{ route('cv.basic') }}" class="btn btn-success">Create CV</a>
                         </div>
                     </div>
                 </div>
