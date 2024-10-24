@@ -44,6 +44,12 @@ class CVController extends Controller
         return redirect()->back()->with('success', 'CV uploaded successfully!');
     }
 
+
+    public function basic()
+    {
+        return view('cv.basic');
+    }
+
     // public function upload(Request $request)
     // {
     //     // Validate the uploaded file
