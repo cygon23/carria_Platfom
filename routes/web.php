@@ -81,7 +81,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/upload-cv', [CVController::class, 'upload'])->name('cv.upload');
     Route::get('/download-cv', [CVController::class, 'download'])->name('cv.download');
     Route::get('/cv/preview', [CvController::class, 'preview'])->name('cv.preview');
-
+    Route::get('cv/basic', [CVController::class, 'basic'])->name('cv.basic');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -108,3 +108,8 @@ Route::get('/auth/google/callback', function (Request $request) {
     Auth::login($user);
     return redirect('/profile');
 });
+
+
+Route::get('/company/ja-africa', function () {
+    return view('companies.ja-africa');
+})->name('company.ja-africa');
