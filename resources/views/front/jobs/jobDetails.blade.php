@@ -88,11 +88,60 @@
                                         <input type="hidden" name="id" value="{{ $job->id }}">
                                         <button type="submit" class="btn btn-secondary">Save</button>
                                     </form>
-                                    <form action="{{ route('apply-job') }}" method="POST" style="display: inline;">
+                                    {{-- <form action="{{ route('apply-job') }}" method="POST" style="display: inline;">
                                         @csrf
                                         <input type="hidden" name="id" value="{{ $job->id }}">
                                         <button type="submit" class="btn btn-primary">Apply</button>
+                                    </form> --}}
+
+
+                                    <!-- Apply Job Form -->
+                                    <form id="applyJobForm" action="{{ route('apply-job') }}" method="POST"
+                                        style="display: inline;">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $job->id }}">
+                                        <button type="button" id="applyButton" class="btn btn-primary">Apply</button>
                                     </form>
+
+                                    <!-- Qualification Modal -->
+                                    <div class="modal fade" id="qualificationModal" tabindex="-1" role="dialog"
+                                        aria-labelledby="qualificationModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="qualificationModalLabel">Confirm Your
+                                                        Qualifications</h5>
+                                                    <button type="button" class="close" data-bs-dismiss="modal">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Make sure you have the following qualifications filled in your cv for
+                                                        applying:</p>
+                                                    <ul>
+                                                        <li>Basic Information</li>
+                                                        <li>Education</li>
+                                                        <li>Experience</li>
+                                                        <li>Skills</li>
+                                                        <li>Awards</li>
+                                                    </ul>
+                                                    <p>If you haven't completed your CV, please update it first.</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Close</button>
+                                                    <a id="updateCvButton" href="{{ route('account.cv') }}"
+                                                        class="btn btn-primary">Update CV</a>
+                                                    <button type="button" id="confirmApplyButton"
+                                                        class="btn btn-success">Proceed to Apply</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- jQuery and Bootstrap JS for apply popup -->
+                                    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
                                 @else
                                     <a href="javascript:void(0);" class="btn btn-secondary disabled">Login to Save</a>
                                     <a href="javascript:void(0);" class="btn btn-primary disabled">Login to Apply</a>
@@ -191,4 +240,21 @@
 @endsection
 
 @section('customJs')
+    <!-- Custom JavaScript for handling modal and form submission -->
+    <script>
+        $(document).ready(function() {
+            $('#applyButton').on('click', function(e) {
+                e.preventDefault();
+                $('#qualificationModal').modal('show');
+            });
+
+            $('#confirmApplyButton').on('click', function() {
+                $('#applyJobForm').submit();
+            });
+
+            $('#updateCvButton').on('click', function(e) {
+                window.location.href = $(this).attr('href');
+            });
+        });
+    </script>
 @endsection
