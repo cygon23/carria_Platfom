@@ -81,7 +81,18 @@ Route::middleware('auth')->group(function () {
     Route::post('/upload-cv', [CVController::class, 'upload'])->name('cv.upload');
     Route::get('/download-cv', [CVController::class, 'download'])->name('cv.download');
     Route::get('/cv/preview', [CvController::class, 'preview'])->name('cv.preview');
+    ///cv url user created for them self
     Route::get('cv/basic', [CVController::class, 'basic'])->name('cv.basic');
+    Route::post('cv/basic/store', [CVController::class, 'storeBasic'])->name('cv.basic.store');
+    Route::get('cv/education', [CVController::class, 'education'])->name('cv.education');
+    Route::post('cv/education/store', [CVController::class, 'storeEducation'])->name('cv.education.store');
+    Route::get('cv/experience', [CVController::class, 'experience'])->name('cv.experience');
+    Route::post('cv/experience/store', [CVController::class, 'storeExperience'])->name('cv.experience.store');
+    Route::get('cv/skills', [CVController::class, 'skills'])->name('cv.skills');
+    Route::post('cv/skills/store', [CVController::class, 'storeSkills'])->name('cv.skills.store');
+    Route::get('cv/awards', [CVController::class, 'awards'])->name('cv.awards');
+    Route::post('cv/awards/store', [CVController::class, 'storeAwards'])->name('cv.awards.store');
+
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
