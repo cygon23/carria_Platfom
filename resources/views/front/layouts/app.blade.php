@@ -22,17 +22,6 @@
         integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
-
-
-    <link href="{{ url('test/assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/boxicons/css/boxicons.min.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/quill/quill.snow.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/quill/quill.bubble.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/remixicon/remixicon.css') }}" rel="stylesheet">
-    <link href="{{ url('test/assets/vendor/simple-datatables/style.css') }}" rel="stylesheet">
-
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link
