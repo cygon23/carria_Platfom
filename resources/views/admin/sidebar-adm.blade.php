@@ -18,16 +18,20 @@
     <div class="card-body p-0">
         <ul class="list-group list-group-flush ">
             <li class="list-group-item d-flex justify-content-between p-3">
-                <a href="{{ route('dashboard.users') }}">Users List</a>
+                <a href="{{ route('dashboard.users') }}">
+                    <i class="fas fa-user"></i> Users List </a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('dashboard.index') }}">Jobs</a>
+                <a href="{{ route('dashboard.index') }}">
+                    <i class="fas fa-briefcase"></i> Jobs </a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('dashboard.application.index') }}">Jobs Application</a>
+                <a href="{{ route('dashboard.application.index') }}">
+                    <i class="fas fa-file-alt"></i>Jobs Application </a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('logout') }}">logout</a>
+                <a href="{{ route('logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> logout </a>
             </li>
         </ul>
     </div>
