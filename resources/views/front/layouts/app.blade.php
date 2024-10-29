@@ -69,6 +69,21 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" href="{{ route('companies') }}">Companies</a>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="opportunitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Opportunities
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="opportunitiesDropdown">
+                                <li>
+                                    <a class="dropdown-item" href="#">Our Partners</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#">Oportunity</a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                     @if (!Auth::check())
                         <a class="btn btn-outline-primary me-2" href="{{ route('login') }}">Login</a>
