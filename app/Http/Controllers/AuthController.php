@@ -35,7 +35,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:20|confirmed',
+            'password' => 'required|string|min:8|max:20|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
             'password_confirmation' => 'required'
         ]);
 
@@ -84,6 +84,8 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|min:8|max:20',
+            'g-recaptcha-response' => 'required|recaptcha',
+
         ]);
 
         if ($validator->fails()) {
