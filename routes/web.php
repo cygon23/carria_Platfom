@@ -51,7 +51,7 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'register']);
     Route::post('/register', [AuthController::class, 'processRegistration']);
     Route::get('/login', [AuthController::class, 'login'])->name('login');
-    Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('login.authenticate');
+    Route::post('/login/authenticate', [AuthController::class, 'authenticate'])->name('login.authenticate')->middleware('throttle:5,1');;
     Route::get('verify/{token}', [AuthController::class, 'verify']);
 
     //email verification

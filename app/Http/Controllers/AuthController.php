@@ -6,21 +6,19 @@ use App\Mail\ResetPasswordEmail;
 use App\Mail\VeryfyEmail;
 use App\Models\Category;
 use App\Models\Job;
-use App\Models\JobApplication;
 use App\Models\JobType;
-use App\Models\SaveJob;
+use App\Models\LoginAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Flasher\Prime\FlasherInterface;
+use Illuminate\Support\Facades\RateLimiter;
 
 
 class AuthController extends Controller
@@ -78,46 +76,127 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function authenticate(Request $request)
-    {
 
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:8|max:20',
-            'g-recaptcha-response' => 'required|recaptcha',
 
+//     public function authenticate(Request $request)
+// {
+//     // Limit login attempts
+//     $key = 'login-attempts:' . $request->ip();
+
+//     if (RateLimiter::tooManyAttempts($key, 5)) {
+//         $seconds = RateLimiter::availableIn($key);
+//         return redirect()->back()->withErrors([
+//             'error' => "Too many login attempts. Please try again in {$seconds} seconds."
+//         ]);
+//     }
+
+//     $validator = Validator::make($request->all(), [
+//         'email' => 'required|email',
+//         'password' => 'required|min:8|max:20',
+//         'g-recaptcha-response' => 'required|recaptcha',
+//     ]);
+
+//     if ($validator->fails()) {
+//         RateLimiter::hit($key, 60); // Log a failed attempt and set cooldown time (1 minute)
+//         return redirect()->back()->withErrors($validator)->withInput();
+//     }
+
+//     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+//         RateLimiter::clear($key); // Reset login attempts on successful login
+
+//         if (!empty(Auth::user()->email_verified_at)) {
+//             return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
+//         } else {
+//             $user = Auth::user();
+//             Auth::logout();
+
+//             $user->remember_token = Str::random(40);
+//             $user->save();
+
+//             Mail::to($user->email)->send(new VeryfyEmail($user));
+//             flash()->success('Please check your email to verify your account.');
+
+//             return redirect()->back();
+//         }
+//     } else {
+//         RateLimiter::hit($key, 60); // Log a failed attempt and set cooldown time (1 minute)
+//         return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
+//     }
+// }
+
+
+
+public function authenticate(Request $request)
+{
+    // Define the rate limiter key using the user's IP address
+    $key = 'login-attempts:' . $request->ip();
+
+    // Check if there have been too many attempts
+    if (RateLimiter::tooManyAttempts($key, 5)) {
+        $seconds = RateLimiter::availableIn($key);
+        return redirect()->back()->withErrors([
+            'error' => "Too many login attempts. Please try again in {$seconds} seconds."
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-
-
-            if (!empty(Auth::user()->email_verified_at)) {
-                // Redirect to profile if email is verified
-                return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
-            } else {
-                // User is logged in but has not verified their email
-                $user = Auth::user(); // Get the authenticated user
-                Auth::logout(); // Log the user out
-
-                // Generate a new verification token
-                $user->remember_token = Str::random(40);
-                $user->save();
-
-                // Send the verification email
-                Mail::to($user->email)->send(new VeryfyEmail($user));
-                flash()->success('Please Check to your email box to verify the email.');
-
-                return redirect()->back();
-            }
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
-        }
     }
 
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required|min:8|max:20',
+        'g-recaptcha-response' => 'required|recaptcha',
+    ]);
+
+    if ($validator->fails()) {
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => false,
+            'attempted_at' => now(),
+        ]);
+
+        // Increment rate limiter for failed attempt and cooldown time
+        RateLimiter::hit($key, 60); // 1 minute cooldown
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => true,
+            'attempted_at' => now(),
+        ]);
+
+        // Clear the rate limiter for successful login
+        RateLimiter::clear($key);
+
+        if (!empty(Auth::user()->email_verified_at)) {
+            return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
+        } else {
+            $user = Auth::user();
+            Auth::logout();
+
+            $user->remember_token = Str::random(40);
+            $user->save();
+
+            Mail::to($user->email)->send(new VeryfyEmail($user));
+            flash()->success('Please check your email to verify your account.');
+
+            return redirect()->back();
+        }
+    } else {
+        // Log the failed attempt
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => false,
+            'attempted_at' => now(),
+        ]);
+
+        // Increment rate limiter for failed attempt and cooldown time
+        RateLimiter::hit($key, 60); // 1 minute cooldown
+        return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
+    }
+}
 
 
     public function profile()
