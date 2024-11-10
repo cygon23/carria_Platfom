@@ -102,6 +102,10 @@
                                 <button class="btn btn-primary mt-2">Login</button>
                                 <a href="{{ url('password-forgot') }}" class="mt-3">Forgot Password?</a>
                             </div>
+
+                             <div class="recapture">
+                                  {!! htmlFormSnippet() !!}
+                             </div>
                         </form>
 
                         <!-- Social Login Options -->
