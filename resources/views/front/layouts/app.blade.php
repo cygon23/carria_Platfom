@@ -31,6 +31,8 @@
     <!-- Template Main CSS File -->
     <link href="{{ url('test/assets/css/style.css') }}" rel="stylesheet">
 
+      {!! htmlScriptTagJsApi() !!}
+
     <style>
         .section-5 {
             /* background-image: url('assets/images/banner-1.jpg'); */
@@ -40,6 +42,10 @@
             /* Optionally add padding or adjust height if needed */
             padding: 50px 0;
 
+        }
+        .recapture{
+            padding-top: 10px;
+            margin-left: 10px;
         }
     </style>
 
