@@ -12,7 +12,8 @@
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "php-flasher/flasher-toastr-laravel": "^2.0",
-        "spatie/laravel-activitylog": "^4.8"
+        "spatie/laravel-activitylog": "^4.8",
+        "twilio/sdk": "^8.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",
