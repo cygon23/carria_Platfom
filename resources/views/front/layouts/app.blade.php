@@ -12,8 +12,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
     <link rel="stylesheet" type="text/css" href="{{ url('assets/css/style.css') }}" />
     <!-- Fav Icon -->
+    <link rel="shortcut icon" type="image/x-icon" href="#" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+        integrity="sha384-k6RqeWeci5ZR/Lv4MR0sA0FfDOM6bW1Ht3y9Y7KpUbsj2/zUr3pcf12u3L0/Qe" crossorigin="anonymous">
 
-    <link rel="icon" type="image/png" href="{{ asset('assets/favicon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Trumbowyg/2.27.3/ui/trumbowyg.min.css"
+        integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+           <link rel="icon" type="image/png" href="{{ asset('assets/favicon/favicon-96x96.png') }}" sizes="96x96" />
     <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon/favicon.svg') }}" />
     <link rel="shortcut icon" href="{{ asset('assets/favicon/favicon.ico') }}" />
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicon/apple-touch-icon.png') }}" />
@@ -93,12 +103,14 @@
                     @else
                         @if (Auth::user()->role === 'admin')
                             <a class="btn btn-outline-primary me-2" href="{{ route('dashboard') }}">Dashboard</a>
+
+                            <a class="btn btn-outline-primary me-2" href="{{ route('create-job') }}" type="submit">Post a Job</a>
                         @endif
                         <a class="btn btn-outline-primary me-2" href="{{ route('profile') }}">Account</a>
                     @endif
 
 
-                    <a class="btn btn-primary" href="{{ route('create-job') }}" type="submit">Post a Job</a>
+                    {{-- <a class="btn btn-primary" href="{{ route('create-job') }}" type="submit">Post a Job</a> --}}
                 </div>
             </div>
         </nav>

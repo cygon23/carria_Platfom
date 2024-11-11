@@ -5,6 +5,7 @@ use App\Http\Controllers\admin\JobAdminController;
 use App\Http\Controllers\admin\JobApplicationController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CVController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\JobController;
@@ -45,6 +46,10 @@ Route::middleware('admin')->group(function () {
 
     Route::get('/dashboard/jobs/application', [JobApplicationController::class, 'index'])->name('dashboard.application.index');
     Route::post('/dashboard/admin/application/delete/{id}', [JobApplicationController::class, 'admindeleteJobApplication'])->name('dashboard.deleteJob.application');
+
+    //on work
+    Route::get('/dashboard/admin/application/companies',[CompanyController::class,'index'])->name('dashboard.application.companies');
+    Route::get('//dashboard/admin/application/companies',[CompanyController::class,'create'])->name('dashboard.application.companies.create');
 });
 
 Route::middleware('guest')->group(function () {

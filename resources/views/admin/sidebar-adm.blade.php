@@ -29,6 +29,25 @@
                 <a href="{{ route('dashboard.application.index') }}">
                     <i class="fas fa-file-alt"></i>Jobs Application </a>
             </li>
+
+             {{-- <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="{{ route('dashboard.application.companies') }}">
+                   <i class="fas fa-building"></i> Adding Companies
+            </li> --}}
+
+            <li class="list-group-item d-flex justify-content-between align-items-center p-3 dropdown">
+                <a href="#" class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-cogs"></i> Actions
+                </a>
+                   <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{{ route('dashboard.application.companies') }}"><i class="fas fa-list"></i>Companies List</a></li>
+                      <li><a class="dropdown-item" href="{{ route('dashboard.application.companies.create') }}"><i class="fas fa-plus-circle"></i> Add Company Edit Company</a></li>
+                   <li><a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Company</a></li>
+                   <li><a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete Company</a></li>
+                </ul>
+            </li>
+
+
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('logout') }}">
                     <i class="fas fa-sign-out-alt"></i> logout </a>
