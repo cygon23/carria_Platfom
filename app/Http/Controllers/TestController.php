@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Notifications\NewJobPostedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Twilio\Rest\Client;
 
 class TestController extends Controller
 {
@@ -20,13 +23,13 @@ class TestController extends Controller
             'description' => 'required',
             'keywords' => 'required',
             'company_name' => 'required|min:3|max:75',
-            'salary' => 'nullable',  // Optional field
-            'benefits' => 'nullable',  // Optional field
-            'responsibility' => 'nullable',  // Optional field
-            'qualification' => 'nullable',  // Optional field
-            'experience' => 'required|integer',  // Mandatory field
-            'company_location' => 'nullable',  // Optional field
-            'company_website' => 'nullable|url'  // Optional field, validate URL format
+            'salary' => 'nullable',
+            'benefits' => 'nullable',
+            'responsibility' => 'nullable',
+            'qualification' => 'nullable',
+            'experience' => 'required|integer',
+            'company_location' => 'nullable',
+            'company_website' => 'nullable|url'
         ];
 
         // Validate the incoming request using the defined rules
@@ -54,7 +57,30 @@ class TestController extends Controller
             'updated_at' => now()   // Store timestamp for when the job was updated
         ]);
 
-        // Redirect after successfully adding the job
+
+     // Initialize Twilio client
+    $twilio = new Client(config('services.twilio.sid'), config('services.twilio.token'));
+
+
+
+    // Get users with valid phone numbers only
+    $users = User::whereNotNull('mobile')
+                 ->where('mobile', '!=', '')
+                 ->get();
+
+
+    foreach ($users as $user) {
+        if (preg_match('/^\+?[1-9]\d{1,14}$/', $user->mobile)) {
+            $twilio->messages->create(
+                $user->mobile,
+                [
+                    'from' => '+12564748476',
+                    'body' => "A new job has been posted: {$validatedData['title']}. Check it out!"
+                ]
+            );
+        }
+    }
+
         return redirect()->route('my-job')->with('success', 'Job posted successfully!');
     }
 }
