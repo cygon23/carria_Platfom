@@ -83,7 +83,7 @@
                             <a class="nav-link" aria-current="page" href="{{ route('companies') }}">Companies</a>
                         </li>
 
-                        <li class="nav-item dropdown">
+                        {{-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="opportunitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Opportunities
                             </a>
@@ -95,7 +95,7 @@
                                     <a class="dropdown-item" href="#">Oportunity</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                     </ul>
                     @if (!Auth::check())
