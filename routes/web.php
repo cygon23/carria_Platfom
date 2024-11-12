@@ -31,6 +31,8 @@ Route::post('/password-forgot', [AuthController::class, 'processForgotPassword']
 Route::get('/password-forgot/{token}', [AuthController::class, 'emailResetPassword'])->name('password-reset.email');
 Route::post('/password-forgot/email-request', [AuthController::class, 'processEmailResetPassword'])->name('password-reset.email.reqest');
 
+  Route::get('/companies',[CompanyController::class,'index'])->name('companies');
+
 Route::middleware('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -48,8 +50,9 @@ Route::middleware('admin')->group(function () {
     Route::post('/dashboard/admin/application/delete/{id}', [JobApplicationController::class, 'admindeleteJobApplication'])->name('dashboard.deleteJob.application');
 
     //on work
-    Route::get('/dashboard/admin/application/companies',[CompanyController::class,'index'])->name('dashboard.application.companies');
-    Route::get('//dashboard/admin/application/companies',[CompanyController::class,'create'])->name('dashboard.application.companies.create');
+
+    Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
+    Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 });
 
 Route::middleware('guest')->group(function () {
@@ -126,6 +129,4 @@ Route::get('/auth/google/callback', function (Request $request) {
 });
 
 
-Route::get('/company/ja-africa', function () {
-    return view('companies.ja-africa');
-})->name('company.ja-africa');
+
