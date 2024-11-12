@@ -40,8 +40,8 @@
                     <i class="fas fa-cogs"></i> Actions
                 </a>
                    <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="{{ route('dashboard.application.companies') }}"><i class="fas fa-list"></i>Companies List</a></li>
-                      <li><a class="dropdown-item" href="{{ route('dashboard.application.companies.create') }}"><i class="fas fa-plus-circle"></i> Add Company Edit Company</a></li>
+                    <li><a class="dropdown-item" href="{{ route('companies') }}"><i class="fas fa-list"></i>Companies List</a></li>
+                      <li><a class="dropdown-item" href="{{ route('companies.create') }}"><i class="fas fa-plus-circle"></i> Add Company </a></li>
                    <li><a class="dropdown-item" href="#"><i class="fas fa-edit"></i> Edit Company</a></li>
                    <li><a class="dropdown-item" href="#"><i class="fas fa-trash"></i> Delete Company</a></li>
                 </ul>
