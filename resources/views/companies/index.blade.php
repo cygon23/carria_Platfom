@@ -1,82 +1,56 @@
 @extends('front.layouts.app')
 
-
 @section('main')
-    <div class="container">
-        <div class="row">
+<div class="container">
+    <h2>All Companies</h2>
+
+    <!-- Loop through each company in the paginated collection -->
+    @foreach($companies as $company)
+        <div class="row mb-4">
             <!-- Company Details -->
-            <div class="col-md-12 mb-4">
+            <div class="col-md-12">
                 <div class="card shadow-sm">
-                    <img src="{{ url('assets/images/jobs/ia.jpg') }}" alt="JA Africa" class="card-img-top"
-                        style="height: 300px; object-fit: cover;">
+                    <!-- Use Storage::url() to get the correct image URL -->
+                    <img src="{{ Storage::url($company->image_path) }}" alt="{{ $company->name }}" class="card-img-top"
+                         style="height: 300px; object-fit: cover;">
+                            {{-- <img src="{{ asset('storage/' . $image->image_path) }}" alt="{{ $company->name }}" class="card-img-top"
+         style="height: 300px; object-fit: cover;"> --}}
                     <div class="card-body">
-                        <h3 class="card-title">JA Africa</h3>
-                        <p class="card-text">
-                            <strong>About:</strong> JA Africa is a global leader in cloud computing and AI solutions,
-                            helping businesses around the world scale through cutting-edge technology.
-                        </p>
-                        <p class="card-text">
-                            <strong>What We Offer:</strong> We offer innovative cloud solutions, AI-powered analytics, and a
-                            variety of enterprise software tools.
-                        </p>
-                        <p class="card-text">
-                            <strong>Location:</strong> Arusha, TZ
-                        </p>
+                        <h3 class="card-title">{{ $company->name }}</h3>
+                        <p class="card-text"><strong>About:</strong> {{ $company->about }}</p>
+                        <p class="card-text"><strong>What We Offer:</strong> {{ $company->offer }}</p>
+                        <p class="card-text"><strong>Location:</strong> {{ $company->location }}</p>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Available Job Positions as Cards -->
+        <!-- Job Positions for this Company -->
         <div class="row">
-            <h4 class="mb-4">Available Job Positions</h4>
-
-            <!-- Job 1 -->
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
-                    <img src="{{ url('assets/images/com/ai.jpg') }}" alt="Cloud Engineer" class="card-img-top"
-                        style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Cloud Engineer</h5>
-                        <p class="card-text">Join our team of cloud engineers to develop and scale cloud infrastructure.</p>
-                        <a href="{{ url('/account/jobs') }}" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Apply Now
-                        </a>
+            <h4>Available Job Positions at {{ $company->name }}</h4>
+            @foreach($company->jobPositions as $job)
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <!-- Use Storage::url() to get the correct job image URL -->
+                        <img src="{{ Storage::url($job->image_path) }}" alt="{{ $job->title }}" class="card-img-top"
+                             style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $job->title }}</h5>
+                            <p class="card-text">{{ $job->description }}</p>
+                            <a href="{{ url('/account/jobs') }}" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Apply Now
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <!-- Job 2 -->
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
-                    <img src="{{ url('assets/images/com/ai1.jpg') }}" alt="AI Research Specialist" class="card-img-top"
-                        style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">AI Research Specialist</h5>
-                        <p class="card-text">Work on cutting-edge AI projects and help innovate solutions across industries.
-                        </p>
-                        <a href="#" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Apply Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Job 3 (Add more job positions similarly) -->
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
-                    <img src="{{ url('assets/images/com/ai2.jpg') }}" alt="Data Scientist" class="card-img-top"
-                        style="height: 200px; object-fit: cover;">
-                    <div class="card-body">
-                        <h5 class="card-title">Data Scientist</h5>
-                        <p class="card-text">Analyze big data and build models to provide insights to our clients.</p>
-                        <a href="#" class="btn btn-primary">
-                            <i class="fas fa-paper-plane"></i> Apply Now
-                        </a>
-                    </div>
-                </div>
-            </div>
-
+            @endforeach
         </div>
+    @endforeach
+
+    <!-- Pagination links -->
+    <div class="mt-4">
+        {{ $companies->links() }}
+
     </div>
+</div>
 @endsection
