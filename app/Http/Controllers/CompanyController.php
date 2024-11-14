@@ -40,29 +40,48 @@ class CompanyController extends Controller
     ]);
     $company->save();
 
-    // Save Company Images
-    if ($request->hasFile('images')) {
-        foreach ($request->file('images') as $image) {
-            $imagePath = $image->store('company_images', 'public');
-            $company->images()->create(['path' => $imagePath]);
-        }
-    }
-
-    // Save Job Positions and Their Images
-    foreach ($request->job_positions as $jobData) {
-        $job = $company->jobPositions()->create([
-            'title' => $jobData['title'],
-            'description' => $jobData['description'],
+  // Save Company Images
+if ($request->hasFile('images')) {
+    foreach ($request->file('images') as $image) {
+        $imagePath = $image->store('company_images', 'public');
+        $company->images()->create([
+            'path' => 'storage/' . $imagePath,
+            'image_path' => 'storage/' . $imagePath,
         ]);
-
-        if (isset($jobData['image']) && $jobData['image']->isValid()) {
-            $jobImagePath = $jobData['image']->store('job_images', 'public');
-            $job->update(['image_path' => $jobImagePath]);
-        }
     }
+} else {
+    // If no image is uploaded, set image_path as NULL
+    $company->images()->create([
+        'path' => null,
+        'image_path' => null,
+    ]);
+}
+
+
+// Save Job Positions and Their Images
+foreach ($request->job_positions as $jobData) {
+    $jobImagePath = null;  // Initialize as null in case no image is provided
+
+    // Check if image is valid and store it
+    if (isset($jobData['image']) && $jobData['image']->isValid()) {
+        $jobImagePath = 'storage/' . $jobData['image']->store('job_images', 'public');
+    }
+
+    // Create job position with image path
+    $company->jobPositions()->create([
+        'title' => $jobData['title'],
+        'description' => $jobData['description'],
+        'image_path' => $jobImagePath,  // This will be null if no image is provided
+    ]);
+}
+
+
 
     return redirect()->route('companies')->with('success', 'Company and job positions added successfully.');
 }
+
+
+
 
 
 }
