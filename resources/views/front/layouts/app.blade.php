@@ -54,6 +54,9 @@
             padding-top: 10px;
             margin-left: 10px;
         }
+  .company{
+            padding-bottom: 200px;
+        }
     </style>
 
 </head>

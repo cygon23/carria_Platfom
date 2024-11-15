@@ -3,7 +3,7 @@
 
 @section('main')
 
-<div class="container">
+<div class="container company">
     <h2>Add New Company and Job Positions</h2>
 
     <form action="{{ route('companies.store') }}" method="POST" enctype="multipart/form-data">
@@ -52,11 +52,6 @@
                 <div class="form-group">
                     <label>Job Description</label>
                     <textarea class="form-control" name="job_positions[0][description]" required></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label>Job Image</label>
-                    <input type="file" class="form-control" name="job_positions[0][image]">
                 </div>
             </div>
         </div>
