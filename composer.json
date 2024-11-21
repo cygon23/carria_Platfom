@@ -9,6 +9,7 @@
         "biscolab/laravel-recaptcha": "^6.1",
         "intervention/image": "^3.8",
         "laravel/framework": "^11.9",
+        "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "php-flasher/flasher-toastr-laravel": "^2.0",
