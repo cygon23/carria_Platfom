@@ -49,7 +49,7 @@
                             <p>Or login with</p>
                             <div class="d-flex justify-content-center">
                                 <!-- LinkedIn Login Button -->
-                                <a href="#" class="btn btn-linkedin mx-2">
+                                <a href="{{'auth/linkedin-openid/redirect'}}" class="btn btn-linkedin mx-2">
                                     <i class="fab fa-linkedin"></i> LinkedIn
                                 </a>
                                 <!-- Google Login Button -->
