@@ -36,7 +36,7 @@
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('jobApplications') }}">
-                    <i class="fas fa-paper-plane"></i>Jobs Applied </a>
+                    <i class="fas fa-paper-plane"></i> Jobs Applied </a>
             </li>
 
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
@@ -47,15 +47,15 @@
              @if(auth()->check() && auth()->user()->role === 'user')
                   <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                       <a href="{{ route('account.cv') }}">
-                           <i class="fas fa-file-alt"></i>  Resume Builder</a>
+                           <i class="fas fa-file-alt"></i> Resume Builder</a>
                       </a>
                   </li>
               @endif
 
               @if (auth()->check() && auth()->user()->role === 'user')
                       <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="#">
-                    <i class="fas fa-lock"></i> Trainings
+                <a href="https://careerguider.vercel.app">
+                   <i class="fas fa-lightbulb"></i> Career Guidance
                 </a>
             </li>
               @endif
