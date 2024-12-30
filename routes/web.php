@@ -18,6 +18,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 
+
 //public url
 Route::get('/', [homeController::class, 'index']);
 Route::get('/companies', [homeController::class, 'featuredCompanies'])->name('companies');
@@ -50,9 +51,12 @@ Route::middleware('admin')->group(function () {
     Route::post('/dashboard/admin/application/delete/{id}', [JobApplicationController::class, 'admindeleteJobApplication'])->name('dashboard.deleteJob.application');
 
     //on work
-
     Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
+
+    //cv viewing
+    Route::get('/admin/submitted-cvs', [DashboardController::class, 'showSubmittedCVs'])->name('admin.submittedCvs');
+
 });
 
 Route::middleware('guest')->group(function () {
@@ -88,7 +92,19 @@ Route::middleware('auth')->group(function () {
     Route::get('accounts/cv', [CVController::class, 'index'])->name('account.cv');
     Route::post('/upload-cv', [CVController::class, 'upload'])->name('cv.upload');
     Route::get('/download-cv', [CVController::class, 'download'])->name('cv.download');
-    Route::get('/cv/preview', [CvController::class, 'preview'])->name('cv.preview');
+    Route::get('/download-cv', function () {
+    $user = Auth::user();
+    if (!$user || !$user->cv_url) {
+        return redirect()->back()->with('error', 'No CV found for this user.');
+    }
+    $filePath = public_path($user->cv_url);
+
+    if (!file_exists($filePath)) {
+        return redirect()->back()->with('error', 'CV file not found.');
+    }
+    return response()->download($filePath);
+    })->name('cv.download')->middleware('auth');
+
     ///cv url user created for them self
     Route::get('cv/basic', [CVController::class, 'basic'])->name('cv.basic');
     Route::post('cv/basic/store', [CVController::class, 'storeBasic'])->name('cv.basic.store');
@@ -100,7 +116,8 @@ Route::middleware('auth')->group(function () {
     Route::post('cv/skills/store', [CVController::class, 'storeSkills'])->name('cv.skills.store');
     Route::get('cv/awards', [CVController::class, 'awards'])->name('cv.awards');
     Route::post('cv/awards/store', [CVController::class, 'storeAwards'])->name('cv.awards.store');
-
+    // Route::get('/cv/preview/{id}', [CvController::class, 'preview'])->name('cv.preview');
+    Route::get('/cv/preview/{id}', [CvController::class, 'preview'])->name('cv.preview');
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
@@ -127,6 +144,33 @@ Route::get('/auth/google/callback', function (Request $request) {
     Auth::login($user);
     return redirect('/profile');
 });
+
+
+ Route::get('auth/linkedin-openid/redirect', function (Request $request){
+    return Socialite::driver("linkedin-openid")->redirect();
+ });
+
+
+ Route::get('/auth/linkedin-openid/callback', function (Request $request){
+     $linkedinUser = Socialite::driver("linkedin-openid")->user();
+
+   $user = User::updateOrCreate(
+        ['linkedin_id' => $linkedinUser->id],
+        [
+            'name' => $linkedinUser->name,
+            'email' => $linkedinUser->email,
+            'password' => Hash::make(Str::random(12)),
+            // 'email_verified_at' => now()
+        ]
+    );
+
+          Auth::login($user);
+          return redirect('/profile');
+    });
+
+
+
+
 
 
 
