@@ -16,38 +16,71 @@ class CVController extends Controller
 {
     public function index()
     {
+        //  $basicInfo = CvBasicInfo::with(['educations', 'experiences', 'skills', 'awards'])
+        //     ->findOrFail($id);
+
         return view('cv.dashboard');
     }
 
 
+    // public function upload(Request $request)
+    // {
+    //     // Validate the uploaded file
+    //     $validator = Validator::make($request->all(), [
+    //         'cv' => 'required|mimes:pdf|max:2048', // Only PDF files and max size of 2MB
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $user = Auth::user();
+    //     $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
+
+    //     // Check if the user already has a CV and delete the existing one
+    //     if ($user->cv_url) {
+    //         Storage::delete('private/' . $user->cv_url); // Delete from the correct disk
+    //     }
+
+    //     // Store the new CV in the private directory
+    //     $request->file('cv')->storeAs('private/cvs', $cvPath);
+
+    //     // Update user's CV URL in the database
+    //     $user->cv_url = $cvPath;
+    //     $user->save();
+
+    //     return redirect()->back()->with('success', 'CV uploaded successfully!');
+    // }
+
     public function upload(Request $request)
-    {
-        // Validate the uploaded file
-        $validator = Validator::make($request->all(), [
-            'cv' => 'required|mimes:pdf|max:2048', // Only PDF files and max size of 2MB
-        ]);
+{
+    // Validate the uploaded file
+    $validator = Validator::make($request->all(), [
+        'cv' => 'required|mimes:pdf|max:2048', // Only PDF files, max size 2MB
+    ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        $user = Auth::user();
-        $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
-
-        // Check if the user already has a CV and delete the existing one
-        if ($user->cv_url) {
-            Storage::delete('private/' . $user->cv_url); // Delete from the correct disk
-        }
-
-        // Store the new CV in the private directory
-        $request->file('cv')->storeAs('private/cvs', $cvPath);
-
-        // Update user's CV URL in the database
-        $user->cv_url = $cvPath;
-        $user->save();
-
-        return redirect()->back()->with('success', 'CV uploaded successfully!');
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+
+    $user = Auth::user();
+    $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
+
+    // Check if the user already has a CV and delete the existing one
+    if ($user->cv_url && file_exists(public_path($user->cv_url))) {
+        unlink(public_path($user->cv_url)); // Delete old file
+    }
+
+    // Store the new CV in the public/cvs directory
+    $request->file('cv')->move(public_path('cvs'), $cvPath);
+
+    // Update the user's CV URL in the database
+    $user->cv_url = $cvPath;
+    $user->save();
+
+    return redirect()->back()->with('success', 'CV uploaded successfully!');
+}
+
 
 
     public function basic()
@@ -186,7 +219,7 @@ class CVController extends Controller
         Award::create($request->all());
 
         // Redirect back with a success message
-        return redirect()->route('companies')->with('success', 'Award added successfully is cv now is complete.');
+        return redirect()->route('account.cv')->with('success', 'Award added successfully is cv now is complete.');
     }
 
 
@@ -199,82 +232,4 @@ class CVController extends Controller
         return view('cv.preview', compact('basicInfo'));
     }
 
-
-    // public function upload(Request $request)
-    // {
-    //     // Validate the uploaded file
-    //     $validator = Validator::make($request->all(), [
-    //         'cv' => 'required|mimes:pdf|max:2048', // Only PDF files and max size of 2MB
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $user = Auth::user();
-    //     $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
-
-    //     // Check if the user already has a CV and delete the existing one
-    //     if ($user->cv_url) {
-    //         Storage::delete('private/' . $user->cv_url); // Delete the existing CV
-    //     }
-
-    //     // Store the new CV in the private directory
-    //     $request->file('cv')->storeAs('private/cvs', $cvPath);
-
-    //     // Update user's CV URL in the database
-    //     $user->cv_url = $cvPath;
-    //     $user->save();
-
-    //     return redirect()->back()->with('success', 'CV uploaded successfully!')->with('cv_url', $cvPath);
-    // }
-
-
-
-
-    // public function preview()
-    // {
-    //     $user = Auth::user();
-
-    //     if ($user && $user->cv_url) {
-    //         $path = storage_path('app/private/' . $user->cv_url);
-
-    //         if (file_exists($path)) {
-    //             return response()->file($path);
-    //         }
-    //     }
-
-    //     return redirect()->back()->withErrors(['error' => 'CV not found or not accessible.']);
-    // }
-
-
-
-
-
-
-
-
-    // public function download()
-    // {
-    //     $user = Auth::user();
-
-    //     // Check if the user has a CV
-    //     if ($user && $user->cv_url) {
-    //         $path = storage_path('app/private/' . $user->cv_url); // Construct the full path
-
-    //         // Debugging output (you can remove this later)
-    //         \Log::info('Checking for CV at: ' . $path); // Log the path being checked
-
-    //         // Check if the file exists
-    //         if (file_exists($path)) {
-    //             // Return a download response
-    //             return response()->download($path);
-    //         } else {
-    //             \Log::error('File not found: ' . $path); // Log error if file is not found
-    //         }
-    //     }
-
-    //     // Redirect back with an error if the CV is not found
-    //     return redirect()->back()->withErrors(['error' => 'CV not found or not accessible.']);
-    // }
 }
