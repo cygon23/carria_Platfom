@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\CVController;
+use App\Models\CVuploaded;
 use App\Models\LoginAttempt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
@@ -17,27 +21,24 @@ class DashboardController extends Controller
         return view('admin.dashboard',compact('loginActivities'));
     }
 
-public function showSubmittedCVs(Request $request)
-{
-    // Fetch all the files from the 'cvs' directory
-    $files = Storage::disk('public')->files('cvs');
+    public function showSubmittedCVs(Request $request)
+    {
+        // Fetch users with non-null cv_url
+        $query = CVUploaded::query()->whereNotNull('cv_url');
 
-    // Optionally, you can add search functionality
-    if ($request->has('search')) {
-        $files = array_filter($files, function ($file) use ($request) {
-            return strpos(strtolower($file), strtolower($request->search)) !== false;
-        });
+        // Apply search filter if provided
+        if ($request->has('search') && !empty($request->search)) {
+            $query->where('user_name', 'like', '%' . $request->search . '%');
+        }
+
+        // Paginate the results
+        $usersWithCVs = $query->paginate(10);
+
+        return view('cv.submitted_cvs', compact('usersWithCVs'));
     }
 
-    // Paginate the results manually
-    $currentPage = LengthAwarePaginator::resolveCurrentPage();
-    $perPage = 10;
-    $currentItems = array_slice($files, ($currentPage - 1) * $perPage, $perPage);
-    $filesPaginator = new LengthAwarePaginator($currentItems, count($files), $perPage, $currentPage);
 
-    // Preserve search query parameters in pagination links
-    $filesPaginator->appends($request->all());
 
-    return view('cv.submitted_cvs', compact('filesPaginator'));
+
 }
-}
+
