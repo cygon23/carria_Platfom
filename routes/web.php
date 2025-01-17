@@ -55,7 +55,8 @@ Route::middleware('admin')->group(function () {
     Route::post('/companies', [CompanyController::class, 'store'])->name('companies.store');
 
     //cv viewing
-    Route::get('/admin/submitted-cvs', [DashboardController::class, 'showSubmittedCVs'])->name('admin.submittedCvs');
+     Route::get('/admin/submitted-cvs', [DashboardController::class, 'showSubmittedCVs'])->name('admin.submittedCvs');
+     Route::delete('/cv/delete', [CVController::class, 'delete'])->name('cv.delete');
 
 });
 
@@ -118,6 +119,7 @@ Route::middleware('auth')->group(function () {
     Route::post('cv/awards/store', [CVController::class, 'storeAwards'])->name('cv.awards.store');
     // Route::get('/cv/preview/{id}', [CvController::class, 'preview'])->name('cv.preview');
     Route::get('/cv/preview/{id}', [CvController::class, 'preview'])->name('cv.preview');
+
 
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
