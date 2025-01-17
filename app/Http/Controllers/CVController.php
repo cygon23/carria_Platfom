@@ -23,40 +23,13 @@ class CVController extends Controller
     }
 
 
-    // public function upload(Request $request)
-    // {
-    //     // Validate the uploaded file
-    //     $validator = Validator::make($request->all(), [
-    //         'cv' => 'required|mimes:pdf|max:2048', // Only PDF files and max size of 2MB
-    //     ]);
 
-    //     if ($validator->fails()) {
-    //         return redirect()->back()->withErrors($validator)->withInput();
-    //     }
 
-    //     $user = Auth::user();
-    //     $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
-
-    //     // Check if the user already has a CV and delete the existing one
-    //     if ($user->cv_url) {
-    //         Storage::delete('private/' . $user->cv_url); // Delete from the correct disk
-    //     }
-
-    //     // Store the new CV in the private directory
-    //     $request->file('cv')->storeAs('private/cvs', $cvPath);
-
-    //     // Update user's CV URL in the database
-    //     $user->cv_url = $cvPath;
-    //     $user->save();
-
-    //     return redirect()->back()->with('success', 'CV uploaded successfully!');
-    // }
-
-    public function upload(Request $request)
+public function upload(Request $request)
 {
     // Validate the uploaded file
     $validator = Validator::make($request->all(), [
-        'cv' => 'required|mimes:pdf|max:2048', // Only PDF files, max size 2MB
+        'cv' => 'required|mimes:pdf|max:2048',
     ]);
 
     if ($validator->fails()) {
@@ -64,15 +37,14 @@ class CVController extends Controller
     }
 
     $user = Auth::user();
-    $cvPath = 'cvs/' . time() . '_' . $request->file('cv')->getClientOriginalName();
 
     // Check if the user already has a CV and delete the existing one
-    if ($user->cv_url && file_exists(public_path($user->cv_url))) {
-        unlink(public_path($user->cv_url)); // Delete old file
+    if ($user->cv_url && Storage::exists($user->cv_url)) {
+        Storage::delete($user->cv_url);
     }
 
-    // Store the new CV in the public/cvs directory
-    $request->file('cv')->move(public_path('cvs'), $cvPath);
+    // Store the new CV in the 'public/cvs' directory
+    $cvPath = $request->file('cv')->store('cvs', 'public');
 
     // Update the user's CV URL in the database
     $user->cv_url = $cvPath;
@@ -80,6 +52,27 @@ class CVController extends Controller
 
     return redirect()->back()->with('success', 'CV uploaded successfully!');
 }
+
+
+public function delete(Request $request)
+{
+    $user = Auth::user();
+
+    // Ensure the user has a CV URL and the file exists
+    if ($user->cv_url && Storage::exists('public/' . $user->cv_url)) {
+        // Delete the CV from the 'public/cvs' directory
+        Storage::delete('public/' . $user->cv_url);
+
+        // Remove the CV URL from the database
+        $user->cv_url = null;
+        $user->save();
+
+        return redirect()->back()->with('success', 'CV deleted successfully!');
+    }
+
+    return redirect()->back()->with('error', 'No CV found to delete.');
+}
+
 
 
 
