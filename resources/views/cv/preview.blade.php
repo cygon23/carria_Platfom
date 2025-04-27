@@ -4,7 +4,7 @@
 
 @section('main')
 
-{{-- <div class="container my-5">
+<div class="container my-5">
     <h2 class="text-center mb-4">CV Preview</h2>
 
     <div class="card p-4 shadow-sm">
@@ -65,7 +65,7 @@
             <p>No awards records available.</p>
         @endif
     </div>
-</div> --}}
+</div>
 
 
 

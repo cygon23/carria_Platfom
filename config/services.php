@@ -41,11 +41,23 @@ return [
         'redirect' => env('GOOGLE_REDIRECT'),
     ],
 
+      'linkedin-openid' => [
+        'client_id' => env('LINKEDIN_CLIENT_ID'),
+        'client_secret' => env('LINKEDIN_CLIENT_SECRET'),
+        'redirect' => env('LINKEDIN_REDIRECT'),
+    ],
+
     'github' => [
         'client_id' => env('GITHUB_CLIENT_ID'),
         'client_secret' => env('GITHUB_CLIENT_SECRET'),
         'redirect' => env('GITHUB_REDIRECT'),
     ],
+
+    'twilio' => [
+    'sid' => env('TWILIO_SID'),
+    'token' => env('TWILIO_AUTH_TOKEN'),
+    'phone_number' => env('TWILIO_PHONE_NUMBER'),
+],
 
 
 

@@ -6,13 +6,19 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "biscolab/laravel-recaptcha": "^6.1",
         "intervention/image": "^3.8",
         "laravel/framework": "^11.9",
+<<<<<<< HEAD
         "laravel/horizon": "^5.31",
+=======
+        "laravel/sanctum": "^4.0",
+>>>>>>> 3c38fc04564067c66bb5a7d96c0caadbbd32c197
         "laravel/socialite": "^5.16",
         "laravel/tinker": "^2.9",
         "php-flasher/flasher-toastr-laravel": "^2.0",
-        "spatie/laravel-activitylog": "^4.8"
+        "spatie/laravel-activitylog": "^4.8",
+        "twilio/sdk": "^8.3"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

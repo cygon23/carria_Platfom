@@ -6,21 +6,19 @@ use App\Mail\ResetPasswordEmail;
 use App\Mail\VeryfyEmail;
 use App\Models\Category;
 use App\Models\Job;
-use App\Models\JobApplication;
 use App\Models\JobType;
-use App\Models\SaveJob;
+use App\Models\LoginAttempt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Flasher\Prime\FlasherInterface;
+use Illuminate\Support\Facades\RateLimiter;
 
 
 class AuthController extends Controller
@@ -30,31 +28,77 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
+    // public function processRegistration(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'name' => 'required',
+    //         'email' => 'required|email|unique:users,email',
+    //         'password' => 'required|string|min:8|max:20|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+    //         'password_confirmation' => 'required'
+    //     ]);
+
+    //     // Check if validation fails
+    //     if ($validator->fails()) {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     $save = new User;
+    //     $save->name = trim($request->name);
+    //     $save->email = trim($request->email);
+    //     // $save->password = Hash::make(trim($request->password));
+    //     $save->password = Hash::make(trim($request->password));
+    //     $save->remember_token = Str::random(40);
+    //     $save->save();
+
+    //     Mail::to($save->email)->send(new VeryfyEmail($save));
+    //     return redirect('login')->with('success', 'check to you inbox to very email address');
+    // }
+
+
     public function processRegistration(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8|max:20|confirmed',
-            'password_confirmation' => 'required'
-        ]);
+{
+    $validator = Validator::make($request->all(), [
+        'name' => 'required',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|string|min:8|max:20|confirmed|regex:/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+        'password_confirmation' => 'required'
+    ]);
 
-        // Check if validation fails
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
+    // Check if validation fails
+    if ($validator->fails()) {
+        // Check if the request expects JSON (API request)
+        if ($request->expectsJson()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => $validator->errors()
+            ], 422);
         }
-
-        $save = new User;
-        $save->name = trim($request->name);
-        $save->email = trim($request->email);
-        // $save->password = Hash::make(trim($request->password));
-        $save->password = Hash::make(trim($request->password));
-        $save->remember_token = Str::random(40);
-        $save->save();
-
-        Mail::to($save->email)->send(new VeryfyEmail($save));
-        return redirect('login')->with('success', 'check to you inbox to very email address');
+        // Otherwise, redirect back for a web request
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+
+    // Create and save the user
+    $save = new User;
+    $save->name = trim($request->name);
+    $save->email = trim($request->email);
+    $save->password = Hash::make(trim($request->password));
+    $save->remember_token = Str::random(40);
+    $save->save();
+
+    // Send verification email
+    Mail::to($save->email)->send(new VeryfyEmail($save));
+
+    // Respond based on the request type
+    if ($request->expectsJson()) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Registration successful, please check your inbox to verify your email address.'
+        ], 201);
+    }
+
+    // Redirect for web requests
+    return redirect('login')->with('success', 'Check your inbox to verify your email address.');
+}
 
 
     public function verify($token)
@@ -78,44 +122,78 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function authenticate(Request $request)
-    {
 
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
-            'password' => 'required|min:8|max:20',
+public function authenticate(Request $request)
+{
+    // Define the rate limiter key using the user's IP address
+    $key = 'login-attempts:' . $request->ip();
+
+    // Check if there have been too many attempts
+    if (RateLimiter::tooManyAttempts($key, 5)) {
+        $seconds = RateLimiter::availableIn($key);
+        return redirect()->back()->withErrors([
+            'error' => "Too many login attempts. Please try again in {$seconds} seconds."
         ]);
-
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
-
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-
-
-            if (!empty(Auth::user()->email_verified_at)) {
-                // Redirect to profile if email is verified
-                return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
-            } else {
-                // User is logged in but has not verified their email
-                $user = Auth::user(); // Get the authenticated user
-                Auth::logout(); // Log the user out
-
-                // Generate a new verification token
-                $user->remember_token = Str::random(40);
-                $user->save();
-
-                // Send the verification email
-                Mail::to($user->email)->send(new VeryfyEmail($user));
-                flash()->success('Please Check to your email box to verify the email.');
-
-                return redirect()->back();
-            }
-        } else {
-            return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
-        }
     }
 
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+        'password' => 'required|min:8|max:20',
+        'g-recaptcha-response' => 'required|recaptcha',
+    ]);
+
+    if ($validator->fails()) {
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => false,
+            'attempted_at' => now(),
+        ]);
+
+        // Increment rate limiter for failed attempt and cooldown time
+        RateLimiter::hit($key, 60); // 1 minute cooldown
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => true,
+            'attempted_at' => now(),
+        ]);
+
+        // Clear the rate limiter for successful login
+        RateLimiter::clear($key);
+
+        if (!empty(Auth::user()->email_verified_at)) {
+            return redirect()->route('profile')->with('success', 'Welcome back! ' . Auth::user()->name);
+        } else {
+            $user = Auth::user();
+            Auth::logout();
+
+            $user->remember_token = Str::random(40);
+            $user->save();
+
+            Mail::to($user->email)->send(new VeryfyEmail($user));
+            flash()->success('Please check your email to verify your account.');
+
+            return redirect()->back();
+        }
+    } else {
+        // Log the failed attempt
+        LoginAttempt::create([
+            'email' => $request->email,
+            'ip_address' => $request->ip(),
+            'success' => false,
+            'attempted_at' => now(),
+        ]);
+
+        // Increment rate limiter for failed attempt and cooldown time
+        RateLimiter::hit($key, 60); // 1 minute cooldown
+        return redirect()->back()->withErrors(['error' => 'Invalid email or password.']);
+    }
+}
 
 
     public function profile()

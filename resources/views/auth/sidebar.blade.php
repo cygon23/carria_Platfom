@@ -22,43 +22,61 @@
             <li class="list-group-item d-flex justify-content-between p-3">
                 <a href="{{ route('profile') }}">Account Settings</a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('create-job') }}">
 
-                    <i class="fas fa-user-gear"></i> Post a Job</a>
-            </li>
+           @if(auth()->check() && auth()->user()->role === 'admin')
+                <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                    <a href="{{ route('create-job') }}">
+                        <i class="fas fa-user-gear"></i> Post a Job
+                    </a>
+                </li>
+            @endif
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('my-job') }}">
                     <i class="fas fa-briefcase"></i> My Jobs</a>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('jobApplications') }}">
-                    <i class="fas fa-paper-plane"></i>Jobs Applied </a>
+                    <i class="fas fa-paper-plane"></i> Jobs Applied </a>
             </li>
+
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('saved-job-account') }}">
                     <i class="fas fa-bookmark"></i> Saved Jobs  </a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="{{ route('account.cv') }}">
-                    <i class="fas fa-file-alt"></i>  Resume Builder</a>
-            </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                <a href="#">
-                    <i class="fas fa-lock"></i> Trainings
+
+             @if(auth()->check() && auth()->user()->role === 'user')
+                  <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                      <a href="{{ route('account.cv') }}">
+                           <i class="fas fa-file-alt"></i> Resume Builder</a>
+                      </a>
+                  </li>
+              @endif
+
+              @if (auth()->check() && auth()->user()->role === 'user')
+                      <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <a href="https://careerguider.vercel.app">
+                   <i class="fas fa-lightbulb"></i> Career Guidance
                 </a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+              @endif
+
+                @if (auth()->check() && auth()->user()->role === 'user')
+                    <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="#">
                     <i class="fas fa-lock"></i> Online Couching
                 </a>
             </li>
-            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+              @endif
+
+                @if (auth()->check() && auth()->user()->role === 'user')
+                   <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="#">
                     <i class="fas fa-medal"></i> Archivements
 
                 </a>
             </li>
+              @endif
+
             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                 <a href="{{ route('logout') }}">
                     <i class="fas fa-sign-out-alt"></i>  logout </a>

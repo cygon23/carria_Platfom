@@ -22,6 +22,13 @@
         integrity="sha512-Fm8kRNVGCBZn0sPmwJbVXlqfJmPC13zRsMElZenX6v721g/H7OukJd8XzDEBRQ2FSATK8xNF9UYvzsCtUpfeJg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
+           <link rel="icon" type="image/png" href="{{ asset('assets/favicon/favicon-96x96.png') }}" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="{{ asset('assets/favicon/favicon.svg') }}" />
+    <link rel="shortcut icon" href="{{ asset('assets/favicon/favicon.ico') }}" />
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicon/apple-touch-icon.png') }}" />
+    <link rel="manifest" href="{{ asset('assets/favicon/web-app-manifest-192x192.png') }}" />
+
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">
     <link
@@ -30,6 +37,8 @@
 
     <!-- Template Main CSS File -->
     <link href="{{ url('test/assets/css/style.css') }}" rel="stylesheet">
+
+      {!! htmlScriptTagJsApi() !!}
 
     <style>
         .section-5 {
@@ -40,6 +49,13 @@
             /* Optionally add padding or adjust height if needed */
             padding: 50px 0;
 
+        }
+        .recapture{
+            padding-top: 10px;
+            margin-left: 10px;
+        }
+  .company{
+            padding-bottom: 200px;
         }
     </style>
 
@@ -70,7 +86,7 @@
                             <a class="nav-link" aria-current="page" href="{{ route('companies') }}">Companies</a>
                         </li>
 
-                        <li class="nav-item dropdown">
+                        {{-- <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="opportunitiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Opportunities
                             </a>
@@ -82,7 +98,7 @@
                                     <a class="dropdown-item" href="#">Oportunity</a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> --}}
 
                     </ul>
                     @if (!Auth::check())
@@ -90,12 +106,14 @@
                     @else
                         @if (Auth::user()->role === 'admin')
                             <a class="btn btn-outline-primary me-2" href="{{ route('dashboard') }}">Dashboard</a>
+
+                            <a class="btn btn-outline-primary me-2" href="{{ route('create-job') }}" type="submit">Post a Job</a>
                         @endif
                         <a class="btn btn-outline-primary me-2" href="{{ route('profile') }}">Account</a>
                     @endif
 
 
-                    <a class="btn btn-primary" href="{{ route('create-job') }}" type="submit">Post a Job</a>
+                    {{-- <a class="btn btn-primary" href="{{ route('create-job') }}" type="submit">Post a Job</a> --}}
                 </div>
             </div>
         </nav>
